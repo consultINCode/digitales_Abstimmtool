@@ -1,6 +1,6 @@
 # Requirements
 
-Enthält alle benötigen Funktionen die die Application abbilden soll
+Enthält alle benötigen Funktionen die die Application abbilden soll.
 
 ## Persons
 ### getAllPersons()
