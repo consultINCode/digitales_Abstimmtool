@@ -1,4 +1,4 @@
-from flask import Flask, Response, request
+from flask import Flask, Response, request, render_template
 import logging
 import api.personapi
 from models import Person, ElectionRound, Choice, session
@@ -110,13 +110,16 @@ def delete_choice(id):
 
 @app.route('/api/choice/', methods=['POST'])
 def create_choice():
-    createChoice(request.data)
+    return createChoice(request.json)
 
-@app.route('/api/choices/<electionid>', methods=['GET'])
+@app.route('/api/election/<electionid>', methods=['GET'])
 def read_choices(electionid):
     return readChoices(electionid)
     
-@app.route('/api/choices/<choiceid>', methods=['POST'])
+@app.route('/api/choice/vote/<choiceid>', methods=['POST'])
 def updateVotes_choices(choiceid):
-    data = request.json
-    return updateVotes(choiceid, data['votes'])
+    return updateVotes(choiceid, request.json)
+
+@app.route('/test')
+def testpage():
+   return render_template('testpage.html')

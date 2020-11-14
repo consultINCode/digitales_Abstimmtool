@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Page Title</title>
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM fully loaded and parsed');
+
+    const form = document.getElementById('votesform');
+    form.addEventListener("submit", (evt)=>{
+        evt.preventDefault();
+        updateVotes(document.getElementById('choiceid').value, document.getElementById('votes').value);
+      });
+});
+
+function updateVotes(choiceid, votes) {
+    console.log('update')
+    var xhttp = new XMLHttpRequest();
+    const data = JSON.stringify({'votes': votes})
+    xhttp.onload = function() {
+      const json = JSON.parse(this.responseText)
+      !json.message
+        ? document.getElementById("votesresult").innerHTML = `ID: ${json.id}, Votes: ${json.votes}`
+        : document.getElementById("votesresult").innerHTML=json.message;
+      
+    };
+    xhttp.open("POST", `http://localhost:5000/api/choice/vote/${choiceid}`, true);
+    xhttp.setRequestHeader("Content-type", "application/json")
+    xhttp.send(data);
+  }
+</script>
+</head>
+<body>
+
+<h1>This is a Heading</h1>
+<p>This is a paragraph.</p>
+
+<div>
+    <h3>Post to updateVotes</h3>
+    <form id='votesform'>
+        <label>
+            ChoiceId: 
+            <input id=choiceid type="text">
+        </label>
+        <label>
+            Votes: 
+            <input id=votes type="text">
+        </label>
+        <button type="submit"></button>
+    </form>
+    <label>Votes: <span id='votesresult'></span></label>
+</div>
+
+</body>
+</html> 

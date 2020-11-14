@@ -12,8 +12,8 @@ def readChoices(electionid):
 
 
 def createChoice(data):
-    return 'test'
-
+    print(str(data))
+    return ''
 
 
 def deleteChoice(choiceid):
@@ -26,10 +26,12 @@ def deleteChoice(choiceid):
         return 'Auswahl {} nicht gefunden'.format(choiceid)
 
 def updateVotes(choiceId, votes):
+    if not votes['votes'].isdigit():
+        return json.dumps({'id':'error', 'votes': -1, 'message':'Not a number'})
     choice = session.query(Choice).get(choiceId)
     if choice:
-        choice.counter += votes
+        choice.counter += int(votes['votes'] or 0)
         session.commit()
         return json.dumps({'id':choiceId, 'votes': choice.counter})
     else:
-        return json.dumps({'id':choiceId, 'votes': -1})
+        return json.dumps({'id':choiceId, 'votes': -1, 'message':'choice not found'})
