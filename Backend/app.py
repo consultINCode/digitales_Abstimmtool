@@ -95,9 +95,9 @@ def checkOutFromElectionRound():
         return Response(status=200)
     return Response(status= 500)
 
-
 #DELETE: { "id": <number> }
 #RETURNS: { "id":<number>, "deleted":<boolean> }
+
 @app.route('/api/choice/<id>', methods=['DELETE'])
 def delete_choice(id):
     return deleteChoice(id)
