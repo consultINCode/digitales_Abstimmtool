@@ -2,6 +2,7 @@ from flask import Flask, Response,request
 import logging
 app = Flask(__name__)
 
+
 # Init logging
 logging.basicConfig(filename='example.log', level=logging.DEBUG)
 
@@ -35,4 +36,5 @@ def functionname():
         yourfunction(data)
         return Response(status=200)
         
+
 
