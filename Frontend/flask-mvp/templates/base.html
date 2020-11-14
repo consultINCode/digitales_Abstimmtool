@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <title>{% block title %}{% endblock %} | consult.IN Voting</title>
+    {% endblock %}
+  </head>
+  <body>
+    <header class="normal-padding centered shadow deco-bar">
+        <h1>consult.IN Voting Tool</h1>
+        <nav class="">
+            <li><a href="/">Home</a></li>
+            <li><a href="">Anmelden</a></li>
+            <li><a href="/showAllPersons">Mitgliederliste</a></li>
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+
+    </footer>
+  </body>
+</html>

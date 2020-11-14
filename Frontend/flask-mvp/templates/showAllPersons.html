@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Mitglieder{% endblock %}
+
+{% block content %}
+<div class="centered">
+    <div class="card centered shadow deco-bar normal-margin">
+        <h2 class="normal-margin">
+          Liste aller tendenziell wahlberechtigten Mitglieder
+        </h2>
+    </div>
+
+    <div class="card centered shadow deco-bar normal-margin">
+        <ul id="personlist">
+            {% for person in persons %}
+            <li class="person {% if person.is_present %}present{% endif %}">
+                <span>{{ person.name }}</span>
+                <span>
+                    {% if person.is_present %}
+                    anwesend
+                    {% else %}
+                    abgemeldet
+                    {% endif %}
+                </span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+     
+  </div>
+{% endblock %}
