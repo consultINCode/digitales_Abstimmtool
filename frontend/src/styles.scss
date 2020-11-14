@@ -1,1 +1,65 @@
 /* You can add global styles to this file, and also import other style files */
+/* Body, HTML 'n stuff */
+
+html,
+body,
+main {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	font-size: large;
+	font-family: 'Open Sans', sans-serif;
+}
+
+main {
+	display: flex;
+	flex-direction: column;
+	background: gray;
+}
+
+header {
+	background: white;
+}
+
+nav {
+	display: flex;
+	justify-content: space-around;
+	flex-direction: row;
+	list-style: none;
+}
+
+nav li a {
+	color: black;
+	margin: 0 15px;
+}
+
+/* Akshually global used style classes */
+
+.centered {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.normal-margin {
+	margin: 12px;
+}
+
+.normal-padding {
+	padding: 8px;
+}
+
+.shadow {
+	box-shadow: 5px 5px 5px #333;
+}
+
+.deco-bar {
+	border-bottom: #c7d314 8px solid;
+}
+
+.card {
+	background-color: white;
+	padding: 12px;
+	width: 80%;
+}

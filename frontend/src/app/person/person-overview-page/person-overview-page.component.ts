@@ -1,15 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {PersonInterface} from "../Interface/Person.Interface";
+import {HttpPersonService} from "../service/http-person.service";
 
 @Component({
-  selector: 'app-person-overview-page',
-  templateUrl: './person-overview-page.component.html',
-  styleUrls: ['./person-overview-page.component.scss']
+    selector: 'app-person-overview-page',
+    templateUrl: './person-overview-page.component.html',
+    styleUrls: ['./person-overview-page.component.scss']
 })
 export class PersonOverviewPageComponent implements OnInit {
 
-  constructor() { }
+    public persons: PersonInterface[];
 
-  ngOnInit(): void {
-  }
+    constructor(
+        private personService: HttpPersonService
+    ) {
+    }
+
+    ngOnInit(): void {
+        this.getPerson();
+    }
+
+    private getPerson() {
+        this.personService.getPersons().subscribe(
+            (persons: PersonInterface[]) => {
+                this.persons = persons;
+            }
+        )
+    }
 
 }
