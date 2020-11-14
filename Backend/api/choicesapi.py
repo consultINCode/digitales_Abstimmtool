@@ -1,12 +1,14 @@
-from Backend.models import Choice, session
+from models import Choice, session
 import base64
 import json
 
 
 def readChoices(electionid):
-    choices = session.query(Choice).all()
-    jsonO = json.dumps(choices)
-    return jsonO
+    choices = session.query(Choice).filter_by(election_round_id=electionid)
+    liste = []
+    for choice in choices:
+        liste.append({'id': choice.id, 'picture': choice.picture, 'description': choice.description, 'counter': choice.counter})
+    return json.dumps(liste)
 
 
 def createChoice(data):

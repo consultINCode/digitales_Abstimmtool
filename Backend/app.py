@@ -5,7 +5,7 @@ from models import Person, ElectionRound, Choice, session
 
 app = Flask(__name__)
 
-from Backend.api.choicesapi import createChoice, deleteChoice, readChoices
+from api.choicesapi import createChoice, deleteChoice, readChoices
 
 app = Flask(__name__)
 
