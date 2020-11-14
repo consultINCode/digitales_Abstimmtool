@@ -1,7 +1,7 @@
 from flask import Flask, Response, request
 import logging
 
-from Backend.api.choicesapi import createChoice, deleteChoice, readChoices
+from api.choicesapi import createChoice, deleteChoice, readChoices
 
 app = Flask(__name__)
 
