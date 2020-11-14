@@ -96,12 +96,6 @@ def checkOutFromElectionRound():
     return Response(status= 500)
 
 
-@app.route('/')
-def answer():
-    return "HelloWOrd"
-
-if __name__ == "__main__":
-    app.run()
 
 
 @app.route('/api/choice/<id>', methods=['DELETE'])
