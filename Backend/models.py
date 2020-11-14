@@ -5,7 +5,6 @@ from sqlalchemy import Column, Integer, String, Text, Boolean
 from sqlalchemy import ForeignKey
 from sqlalchemy import Table
 
-
 engine = create_engine('sqlite:///test.db', echo=False)
 Base = declarative_base()
 
@@ -70,6 +69,7 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
+
        
 ## ADD SOME TEST DATA INTO DB
 
@@ -123,3 +123,29 @@ session.add(ch1)
 session.add(ch2)
 
 session.commit()
+
+
+
+
+# Relationships Basic How To:
+
+# class Customer(Base):
+#    __tablename__ = 'customers'
+
+#    id = Column(Integer, primary_key = True)
+#    name = Column(String)
+#    address = Column(String)
+#    email = Column(String)
+
+# class Invoice(Base):
+#    __tablename__ = 'invoices'
+   
+#    id = Column(Integer, primary_key = True)
+#    custid = Column(Integer, ForeignKey('customers.id'))
+#    invno = Column(Integer)
+#    amount = Column(Integer)
+#    customer = relationship("Customer", back_populates = "invoices")
+
+# c1 = Customer(name = "Gopal Krishna", address = "Bank Street Hydarebad", email = "gk@gmail.com")
+# c1.invoices = [Invoice(invno = 10, amount = 15000), Invoice(invno = 14, amount = 3850)]
+

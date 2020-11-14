@@ -1,7 +1,9 @@
 from flask import Flask, Response,request
 import logging
+
 import api.personapi
 from models import Person, ElectionRound, Choice, session
+
 app = Flask(__name__)
 
 
@@ -37,6 +39,7 @@ def functionname():
         data = request.json
         yourfunction(data)
         return Response(status=200)
+
 
 @app.route('/api/persons/getAllPersons', methods =['Get'])
 def getallpersons():
@@ -104,4 +107,4 @@ def answer():
 if __name__ == "__main__":
     app.run()
 
- 
+
