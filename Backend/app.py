@@ -104,22 +104,31 @@ if __name__ == "__main__":
     app.run()
 
 
+#DELETE: { "id": <number> }
+#RETURNS: { "id":<number>, "deleted":<boolean> }
 @app.route('/api/choice/<id>', methods=['DELETE'])
 def delete_choice(id):
     return deleteChoice(id)
 
+#POST: { "description": <string>, "electionId":<number> }; TODO: picture!
+#RETURNS: { "id":<number>, "description?":<string>, "message?":<error message> }
 @app.route('/api/choice/', methods=['POST'])
 def create_choice():
     return createChoice(request.json)
 
+#URL: <number>
+#RETURNS: { [{ "id":<number>, "picture":<base64String>, "description":<string>, "counter":<number> }] }
 @app.route('/api/election/<electionid>', methods=['GET'])
 def read_choices(electionid):
     return readChoices(electionid)
-    
+
+#URL: <number>; POST: { "votes": <number> }
+#RETURNS: { "id":<number>, "votes":<number>, "message?":<error message> }
 @app.route('/api/choice/vote/<choiceid>', methods=['POST'])
 def updateVotes_choices(choiceid):
     return updateVotes(choiceid, request.json)
 
+#html template for test purpose
 @app.route('/test')
 def testpage():
    return render_template('testpage.html')

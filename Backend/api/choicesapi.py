@@ -12,8 +12,12 @@ def readChoices(electionid):
 
 
 def createChoice(data):
-    print(str(data))
-    return ''
+    choice = Choice(description=data['description'], counter=0, picture=data['picture'], election_round_id=data['electionId'])
+    session.add(choice)
+    session.commit()
+    if choice.id:
+        return json.dumps({'id':choice.id, 'description': choice.description})
+    return json.dumps({'id':-1, 'message': 'Failed to insert choice '})
 
 
 def deleteChoice(choiceid):
@@ -21,9 +25,8 @@ def deleteChoice(choiceid):
     if choice:
         session.delete(choice)
         session.commit()
-        return 'Auswahl {} gelöscht'.format(choiceid)
-    else:
-        return 'Auswahl {} nicht gefunden'.format(choiceid)
+        return json.dumps({'id':choiceid, 'deleted': True})
+    return json.dumps({'id':choiceid, 'deleted': False})
 
 def updateVotes(choiceId, votes):
     if not votes['votes'].isdigit():
