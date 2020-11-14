@@ -24,3 +24,12 @@ def deleteChoice(choiceid):
         return 'Auswahl {} gelöscht'.format(choiceid)
     else:
         return 'Auswahl {} nicht gefunden'.format(choiceid)
+
+def updateVotes(choiceId, votes):
+    choice = session.query(Choice).get(choiceId)
+    if choice:
+        choice.counter += votes
+        session.commit()
+        return json.dumps({'id':choiceId, 'votes': choice.counter})
+    else:
+        return json.dumps({'id':choiceId, 'votes': -1})

@@ -5,7 +5,7 @@ from models import Person, ElectionRound, Choice, session
 
 app = Flask(__name__)
 
-from api.choicesapi import createChoice, deleteChoice, readChoices
+from api.choicesapi import createChoice, deleteChoice, readChoices, updateVotes
 
 app = Flask(__name__)
 
@@ -112,6 +112,11 @@ def delete_choice(id):
 def create_choice():
     createChoice(request.data)
 
-@app.route('/api/choices/<choiceid>', methods=['GET'])
-def read_choices(choiceid):
-    return readChoices(choiceid)
+@app.route('/api/choices/<electionid>', methods=['GET'])
+def read_choices(electionid):
+    return readChoices(electionid)
+    
+@app.route('/api/choices/<choiceid>', methods=['POST'])
+def updateVotes_choices(choiceid):
+    data = request.json
+    return updateVotes(choiceid, data['votes'])
