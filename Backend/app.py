@@ -2,6 +2,7 @@ from flask import Flask, Response,request
 import logging
 
 import api.personapi
+import api.electionroundsapi
 from models import Person, ElectionRound, Choice, session
 
 app = Flask(__name__)
@@ -99,6 +100,47 @@ def checkOutFromElectionRound():
             return Response(status=200)
         return Response(status= 500)
 
+
+##Electionround Endpoints
+
+@app.route('/api/electionrounds/createElectionRound', methods =['POST'])
+def createElectionRound():
+    if request.method == 'POST':
+        data = request.json
+        if api.electionroundsapi.createElectionRound(data):
+            return Response(status=200)
+        return Response(status= 500)
+
+@app.route('/api/electionrounds/getAllElectionRounds', methods =['Get'])
+def getAllElectionRounds():
+    if request.method == 'GET':
+        return api.electionroundsapi.getAllElectionRounds()
+@app.route('/api/electionrounds/getAllOpenElections', methods =['Get'])
+def getAllOpenElections():
+    if request.method == 'GET':
+        return api.electionroundsapi.getAllOpenElections()
+
+@app.route('/api/electionrounds/closeOpenElectionRound', methods =['POST'])
+def closeOpenElectionRound():
+    if request.method == 'POST':
+        data = request.json
+        if api.electionroundsapi.closeOpenElectionRound(data):
+            return Response(status=200)
+        return Response(status= 500)
+
+@app.route('/api/electionrounds/addChoiceToELectionRound', methods =['POST'])
+def addChoiceToELectionRound():
+    if request.method == 'POST':
+        data = request.json
+        if api.electionroundsapi.addChoiceToELectionRound(data):
+            return Response(status=200)
+        return Response(status= 500)
+
+@app.route('/api/electionrounds/getResultofElectionRound', methods =['POST'])
+def getResultofElectionRound():
+    if request.method == 'POST':
+        data = request.json
+        return api.electionroundsapi.getResultofElectionRound(data)
 
 @app.route('/')
 def answer():
