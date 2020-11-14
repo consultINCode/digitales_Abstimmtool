@@ -1,7 +1,9 @@
-from flask import Flask, Response,request
+from flask import Flask, Response, request
 import logging
-app = Flask(__name__)
 
+from Backend.api.choicesapi import createChoice, deleteChoice, readChoices
+
+app = Flask(__name__)
 
 # Init logging
 logging.basicConfig(filename='example.log', level=logging.DEBUG)
@@ -13,13 +15,15 @@ logging.info('So should this')
 logging.warning('And this, too')
 logging.error('And non-ASCII stuff, too, like Øresund and Malmö')
 
+
 # this function should be defined in your /api/modelname
 def yourfunction(data="test"):
     print(data)
 
+
 # Blueprint for Flask Routes
 # copy and adapt :)
-@app.route('/api/modelname/function', methods=['GET', 'POST','DELETE','PUT'])
+@app.route('/api/modelname/function', methods=['GET', 'POST', 'DELETE', 'PUT'])
 def functionname():
     if request.method == 'POST':
         data = request.json
@@ -35,6 +39,16 @@ def functionname():
         data = request.json
         yourfunction(data)
         return Response(status=200)
-        
 
 
+@app.route('/api/choice/<id>', methods=['DELETE'])
+def delete_choice(id):
+    return deleteChoice(id)
+
+@app.route('/api/choice/', methods=['POST'])
+def create_choice():
+    createChoice(request.data)
+
+@app.route('/api/choices/<choiceid>', methods=['GET'])
+def read_choices(choiceid):
+    return readChoices(choiceid)
