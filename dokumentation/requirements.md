@@ -74,7 +74,7 @@ Ermöglicht ein Bild hochzuladen/ zu ändern
 ### createChoice(Choice)
 Option erstellen
 
-### removeChoice(Choice)
+### deleteChoice(Choice)
 Löscht eine Option
 
 ### updateChoice(Choice)
