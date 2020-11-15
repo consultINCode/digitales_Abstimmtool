@@ -108,41 +108,42 @@ def update_votes_choices(choiceid):
 def create_election_round():
     if request.method == 'POST':
         data = request.json
-        if api.electionroundsapi.createElectionRound(data):
+        if api.electionroundsapi.create_election_round(data):
             return Response(status=200)
         return Response(status= 500)
 
 @app.route('/api/electionrounds/getAllElectionRounds', methods =['Get'])
 def get_election_rounds():
     if request.method == 'GET':
-        return api.electionroundsapi.getAllElectionRounds()
+        return api.electionroundsapi.get_all_election_rounds()
 
 @app.route('/api/electionrounds/getAllOpenElections', methods =['Get'])
 def get_all_open_elections():
     if request.method == 'GET':
-        return api.electionroundsapi.getAllOpenElections()
+        return api.electionroundsapi.get_all_open_elections()
 
 @app.route('/api/electionrounds/closeOpenElectionRound', methods =['POST'])
 def close_open_election_round():
     if request.method == 'POST':
         data = request.json
-        if api.electionroundsapi.closeOpenElectionRound(data):
+        if api.electionroundsapi.close_open_election_round(data):
             return Response(status=200)
         return Response(status= 500)
 
-@app.route('/api/electionrounds/addChoiceToELectionRound', methods =['POST'])
+@app.route('/api/electionrounds/addChoiceToElectionRound', methods =['POST'])
 def add_choice_to_election_round():
     if request.method == 'POST':
         data = request.json
-        if api.electionroundsapi.addChoiceToELectionRound(data):
+        if api.electionroundsapi.add_choice_to_election_round(data):
             return Response(status=200)
         return Response(status= 500)
 
-@app.route('/api/electionrounds/getResultofElectionRound', methods =['POST'])
+# TODO(Change to get)
+@app.route('/api/electionrounds/getResultOfElectionRound', methods =['POST'])
 def get_result_of_election_round():
     if request.method == 'POST':
         data = request.json
-        return api.electionroundsapi.getResultofElectionRound(data)
+        return api.electionroundsapi.get_result_of_election_round(data)
 
 @app.route('/api/choiceproxy/createChoiceProxy', methods =['POST'])
 def create_choice_proxy():
