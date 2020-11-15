@@ -10,24 +10,28 @@ window.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('votesform');
     form.addEventListener("submit", (evt)=>{
         evt.preventDefault();
-        updateVotes(document.getElementById('choiceid').value, document.getElementById('votes').value);
+        updateVotes();
       });
 });
 
-function updateVotes(choiceid, votes) {
+function updateVotes() {
     console.log('update')
     var xhttp = new XMLHttpRequest();
-    const data = JSON.stringify({'votes': votes})
+    const data = {
+        description: document.getElementById('description').value,
+        picture: document.getElementById('picture'),
+        electionId: document.getElementById('electionId').value,
+    }
     xhttp.onload = function() {
       const json = JSON.parse(this.responseText)
       !json.message
-        ? document.getElementById("votesresult").innerHTML = `ID: ${json.id}, Votes: ${json.votes}`
-        : document.getElementById("votesresult").innerHTML=json.message;
+        ? document.getElementById("result").innerHTML = `ID: ${json.id}, Votes: ${json.votes}`
+        : document.getElementById("result").innerHTML=json.message;
       
     };
-    xhttp.open("POST", `http://localhost:5000/api/choice/vote/${choiceid}`, true);
+    xhttp.open("POST", `http://localhost:5000/api/choice/`, true);
     xhttp.setRequestHeader("Content-type", "application/json")
-    xhttp.send(data);
+    xhttp.send(JSON.stringify(data));
   }
 </script>
 </head>
@@ -40,16 +44,16 @@ function updateVotes(choiceid, votes) {
     <h3>Post to updateVotes</h3>
     <form id='votesform'>
         <label>
-            ChoiceId: 
-            <input id=choiceid type="text">
+            Description: 
+            <input id=description type="text">
         </label>
         <label>
-            Votes: 
-            <input id=votes type="text">
+            Election ID: 
+            <input id=electionId type="number">
         </label>
         <button type="submit"></button>
     </form>
-    <label>Votes: <span id='votesresult'></span></label>
+    <label>Votes: <span id='result'></span></label>
 </div>
 
 </body>
