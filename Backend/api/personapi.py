@@ -45,8 +45,6 @@ def get_all_persons():
 
 # get_all_persons_checked_in()
 # Gibt alle als anwesend makierten Benutzer zurück.
-
-
 def get_all_persons_checked_in():
     persons = session.query(Person).filter(Person.is_present == True).all()
     session.commit()
@@ -83,7 +81,7 @@ def approve_minimal_voters():
 
 # ### create_person(Person)
 # Bekommt als Parameter mehrer Werte um eine Person anzulegen.
-def create_person(data):
+def create_person(data: dict):
     p1 = Person()
     p1.name = data['name']
     # TODO: Encpyt Passwords
@@ -100,7 +98,7 @@ def create_person(data):
 
 # ### delete_person(Person)
 # Entfernt einen Benutzer aus der Anwendung
-def delete_person(data):
+def delete_person(data: dict) -> bool:
     person = session.query(Person).filter_by(id=data["userid"]).first()
     session.delete(person)
     try:
@@ -111,10 +109,13 @@ def delete_person(data):
     
 # ### generate_password() - same as resetPassword()
 # Generiert ein Passwort für einen Benutzer
-# Idee: Link mit einem geheimniss an user, user clickt, wenn pw = "", neues generieren und zurückgeben
-def generate_password(data):
+# Idee: 
+#   Link mit einem geheimniss an user, user clickt, 
+#   wenn pw = "", neues generieren und zurückgeben
+def generate_password(data: dict) -> str:
     person = session.query(Person).filter_by(id=data["userid"]).first()
-    password = ''.join([choice('abcdefghijklmnopqrstuvwxyz0123456789-') for i in range(15)])
+    password = ''.join(
+        [choice('abcdefghijklmnopqrstuvwxyz0123456789-') for i in range(15)])
     user.password = argon2.hash(password)
     session.commit()
     return '{ "new_password" : "{}"}'.format(password)
@@ -122,7 +123,7 @@ def generate_password(data):
 
 # ### check_in_for_election_round(ElectionRound)
 # Anwesenheit für einen Wahlgang bestätigen
-def check_in_for_election_round(data):
+def check_in_for_election_round(data: dict) -> bool:
     person = session.query(Person).filter(Person.id == data['userid']).first()
     person.is_present = True
     session.add(person)
@@ -134,7 +135,7 @@ def check_in_for_election_round(data):
     
 # ### check_out_from_election_round(ElectionRound)
 # Sich von einem Wahlgang abmelden
-def check_out_from_election_round(data):
+def check_out_from_election_round(data: dict) -> bool:
     person = session.query(Person).filter(Person.id == data['userid']).first()
     person.is_present = False
     try:

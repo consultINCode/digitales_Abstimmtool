@@ -24,7 +24,6 @@ def _get_electionround_by_id(elec_round_id: int) -> ElectionRound:
     
     return elec_round
 
-
 def set_vote(elec_round_id: int, person_id: int) -> dict:
     '''Add a person to the as has voted to the election_round'''
     # Get election_round
@@ -107,4 +106,3 @@ def get_all_persons_who_have_not_voted(elec_round_id: int) -> dict:
         )
 
     return json.dumps(ret)
-

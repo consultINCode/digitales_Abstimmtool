@@ -25,7 +25,7 @@ def create_choice_proxy(data: dict) -> bool:
         return False
     return True
 
-def delete_choice_proxy(id):
+def delete_choice_proxy(id: int) -> bool:
     '''Deletes an choice proxy.'''
     #choice = session.query(Person).join(
     #   has_choice_proxy_table).join(Person).filter(

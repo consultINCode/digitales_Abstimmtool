@@ -43,7 +43,8 @@ def get_all_election_rounds() -> str:
 
 def get_all_open_elections() -> str:
     '''Returns all active elections'''
-    elec_round_list = session.query(ElectionRound).filter(ElectionRound.running == "running").all()
+    elec_round_list = session.query(ElectionRound).filter(
+        ElectionRound.running == "running").all()
     session.commit()
     response = []
     for round in elec_round_list:
@@ -53,7 +54,8 @@ def get_all_open_elections() -> str:
  
 def close_open_election_round(data: dict) -> bool:
     '''Closes an election round.'''
-    electionround = session.query(ElectionRound).filter(ElectionRound.id == data['electionroundid']).first()
+    electionround = session.query(ElectionRound).filter(
+        ElectionRound.id == data['electionroundid']).first()
     if electionround.running != "finished":
         electionround.running = "finished"
     try:
@@ -64,8 +66,10 @@ def close_open_election_round(data: dict) -> bool:
  
 def add_choice_to_election_round(data: dict) -> bool:
     '''Adds an choice to an election round.'''
-    choice = session.query(Choice).filter(Choice.id == data['choiceid']).first()
-    electionround = session.query(ElectionRound).filter(ElectionRound.id == data['electionroundid']).first()
+    choice = session.query(Choice).filter(
+        Choice.id == data['choiceid']).first()
+    electionround = session.query(ElectionRound).filter(
+        ElectionRound.id == data['electionroundid']).first()
     choice.election_round = electionround
     try:
          session.commit()
@@ -75,8 +79,10 @@ def add_choice_to_election_round(data: dict) -> bool:
  
 def get_result_of_election_round(data: dict) -> str:
     '''Returns the result of an election round.'''
-    electionround = session.query(ElectionRound).filter(ElectionRound.id == data['electionroundid']).first()
-    choices_list = session.query(Choice).filter(Choice.election_round_id == electionround.id).all()
+    electionround = session.query(ElectionRound).filter(
+        ElectionRound.id == data['electionroundid']).first()
+    choices_list = session.query(Choice).filter(
+        Choice.election_round_id == electionround.id).all()
     
     response = []
     for choice in choices_list:
