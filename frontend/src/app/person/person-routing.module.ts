@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {PersonOverviewPageComponent} from "./person-overview-page/person-overview-page.component";
-import {CreatePersonPageComponent} from "./create-person-page/create-person-page.component";
+import {PersonOverviewPageComponent} from './person-overview-page/person-overview-page.component';
+import {CreatePersonPageComponent} from './create-person-page/create-person-page.component';
 
 const personRoutes: Routes = [
   { path: 'persons', component: PersonOverviewPageComponent},

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder} from "@angular/forms";
+import {FormBuilder} from '@angular/forms';
 
 @Component({
   selector: 'app-create-person-page',
@@ -12,7 +12,7 @@ export class CreatePersonPageComponent implements OnInit {
         name: [''],
         is_present: [''],
       }
-  )
+  );
 
   constructor(
       private formBuilder: FormBuilder,

@@ -9,15 +9,9 @@ export class LandingPageComponent implements OnInit {
 
   public test = 'test';
 
-  constructor(
-
-  ) { }
+  constructor() { }
 
   ngOnInit(): void {
-  }
-
-  onClickAlert(){
-    alert('test');
   }
 
 }
