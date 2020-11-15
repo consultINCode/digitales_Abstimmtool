@@ -12,86 +12,67 @@ app = Flask(__name__)
 # Init logging
 logging.basicConfig(filename='example.log', level=logging.DEBUG)
 
-# Some example log lines
-logging.info("test")
-logging.debug('This message should go to the log file')
-logging.info('So should this')
-logging.warning('And this, too')
-logging.error('And non-ASCII stuff, too, like Øresund and Malmö')
 
-
-# this function should be defined in your /api/modelname
-def yourfunction(data="test"):
-    print(data)
-
-
-# Blueprint for Flask Routes
-# copy and adapt :)
-@app.route('/api/modelname/function', methods=['GET', 'POST', 'DELETE', 'PUT'])
-def functionname():
-    if request.method == 'POST':
-        data = request.json
-        yourfunction(data)
-        return Response(status=200)
-    elif request.method == 'GET':
-        return yourfunction()
-    elif request.method == 'PUT':
-        data = request.json
-        yourfunction(data)
-        return Response(status=200)
-    elif request.method == 'DELETE':
-        data = request.json
-        yourfunction(data)
-        return Response(status=200)
-
+#GET
+#RETURNS: { [{ "id":<number>, "name":<string>, "password":<string>, "is_present":<boolean>, "role":<number as string> }] }
 @app.route('/api/persons/getAllPersons', methods =['GET'])
-def getallpersons():
-    return api.personapi.getAllPersons()
+def get_all_persons():
+    return api.personapi.get_all_persons()
 
+#GET
+#RETURNS: { [{ "id":<number>, "name":<string>, "password":<string>, "is_present":<boolean>, "role":<number as string> }] }
 @app.route('/api/persons/getAllPersonsCheckedIn', methods =['GET'])
-def getAllPersonsCheckedIn():
-    return api.personapi.getAllPersonsCheckedIn()
+def get_all_persons_checked_in():
+    return api.personapi.get_all_persons_checked_in()
 
+#GET
+#RETURNS: { [{ "id":<number>, "name":<string>, "password":<string>, "is_present":<boolean>, "role":<number as string> }] }
 @app.route('/api/persons/getAllPersonsCheckedOut', methods =['GET'])
-def getAllPersonsCheckedOut():
-    return api.personapi.getAllPersonsCheckedOut()
+def get_all_persons_checked_out():
+    return api.personapi.get_all_persons_checked_out()
      
+#POST { "name":<string> }
+#RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/persons/createPerson', methods =['POST'])
-def createPerson():
+def create_person():
     data = request.json
-    if api.personapi.createPerson(data):
+    if api.personapi.create_person(data):
         return Response(status=200)
     return Response(status= 500)
-
+     
+#DELETE { "userid":<number> } 
+#RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/persons/deletePerson', methods =['DELETE'])
-def deletePerson():
+def delete_person():
     data = request.json
-    if api.personapi.deletePerson(data):
+    if api.personapi.delete_person(data):
         return Response(status=200)
     return Response(status= 500)
 
 
 # TODO(Test)
 @app.route('/api/persons/approveMinimalVoters', methods =['GET', 'POST'])
-def approveMinimalVoters():
+def approve_minimal_voters():
     if request.method == 'GET':
-        if api.personapi.approveMinimalVoters():
+        if api.personapi.approve_minimal_voters():
             return True
         return False
     else:
         return Response(status=405)
-
+     
+#POST { "userid":<number> } 
+#RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/persons/checkInForElectionRound', methods =['POST'])
 def checkInForElectionRound():
     data = request.json
-    if api.personapi.checkInForElectionRound(data):
+    if api.personapi.check_in_for_election_round(data):
         return Response(status=200)
     return Response(status= 500)
 
 @app.route('/api/persons/checkOutFromElectionRound', methods =['POST'])
-def checkOutFromElectionRound():
+def check_out_from_election_round():
     data = request.json
-    if api.personapi.checkOutFromElectionRound(data):
+    if api.personapi.check_out_from_election_round(data):
         return Response(status=200)
     return Response(status= 500)
 
@@ -116,16 +97,11 @@ def read_choices(electionid):
 #URL: <number>; POST: { "votes": <number> }
 #RETURNS: { "id":<number>, "votes":<number>, "message?":<error message> }
 @app.route('/api/choice/vote/<choiceid>', methods=['POST'])
-def updateVotes_choices(choiceid):
+def update_votes_choices(choiceid):
     return updateVotes(choiceid, request.json)
 
-#html template for test purpose
-@app.route('/test')
-def testpage():
-   return render_template('testpage.html')
-
 @app.route('/api/electionrounds/createElectionRound', methods =['POST'])
-def createElectionRound():
+def create_election_round():
     if request.method == 'POST':
         data = request.json
         if api.electionroundsapi.createElectionRound(data):
@@ -133,16 +109,17 @@ def createElectionRound():
         return Response(status= 500)
 
 @app.route('/api/electionrounds/getAllElectionRounds', methods =['Get'])
-def getAllElectionRounds():
+def get_election_rounds():
     if request.method == 'GET':
         return api.electionroundsapi.getAllElectionRounds()
+
 @app.route('/api/electionrounds/getAllOpenElections', methods =['Get'])
-def getAllOpenElections():
+def get_all_open_elections():
     if request.method == 'GET':
         return api.electionroundsapi.getAllOpenElections()
 
 @app.route('/api/electionrounds/closeOpenElectionRound', methods =['POST'])
-def closeOpenElectionRound():
+def close_open_election_round():
     if request.method == 'POST':
         data = request.json
         if api.electionroundsapi.closeOpenElectionRound(data):
@@ -150,7 +127,7 @@ def closeOpenElectionRound():
         return Response(status= 500)
 
 @app.route('/api/electionrounds/addChoiceToELectionRound', methods =['POST'])
-def addChoiceToELectionRound():
+def add_choice_to_election_round():
     if request.method == 'POST':
         data = request.json
         if api.electionroundsapi.addChoiceToELectionRound(data):
@@ -158,13 +135,13 @@ def addChoiceToELectionRound():
         return Response(status= 500)
 
 @app.route('/api/electionrounds/getResultofElectionRound', methods =['POST'])
-def getResultofElectionRound():
+def get_result_of_election_round():
     if request.method == 'POST':
         data = request.json
         return api.electionroundsapi.getResultofElectionRound(data)
 
 @app.route('/api/choiceproxy/createChoiceProxy', methods =['POST'])
-def createChoiceProxy():
+def create_choice_proxy():
     if request.method == 'POST':
         data = request.json
         if api.hasChoice.createChoiceProxy(data):
@@ -172,13 +149,13 @@ def createChoiceProxy():
         return Response(status= 500)
 
 @app.route('/api/choiceproxy/<senderid>', methods=['DELETE'])
-def deleteChoiceProxy(senderid):
+def delete_choice_proxy(senderid):
     if api.hasChoice.deleteChoiceProxy(senderid):
         return Response(status=200)
     return Response(status= 500)
 
 @app.route('/api/choiceproxy/updateChoiceProxy', methods =['POST'])
-def updateChoiceProxy():
+def update_choice_proxy():
     if request.method == 'POST':
         data = request.json
         if api.hasChoice.updateChoiceProxy(data):
@@ -186,7 +163,7 @@ def updateChoiceProxy():
         return Response(status= 500)
 
 @app.route('/api/vote/getAllPersonsWhoVoted', methods =['GET'])
-def getAllPersonsWhoVoted():
+def get_all_persons_who_voted():
     if request.method == 'GET':
         elec_round_id = request.args.get('elec_round_id')
         if elec_round_id is None:
@@ -198,7 +175,7 @@ def getAllPersonsWhoVoted():
         return Response(status=405)
 
 @app.route('/api/vote/getAllPersonsWhoHaveNotVoted', methods =['GET'])
-def getAllPersonsWhoHaveNotVoted():
+def get_all_persons_who_have_not_voted():
     if request.method == 'GET':
         elec_round_id = request.args.get('elec_round_id')
 
@@ -212,7 +189,7 @@ def getAllPersonsWhoHaveNotVoted():
         return Response(status=405)
 
 @app.route('/api/vote/setVote', methods =['POST'])
-def setVote():
+def set_vote():
     if request.method == 'POST':
         data = request.json
         if data is None:
@@ -232,9 +209,11 @@ def setVote():
     else:
         return Response(status=405)
 
+'''
 @app.route('/')
 def answer():
     return "HelloWOrd"
+'''
 
 if __name__ == "__main__":
     app.run()
