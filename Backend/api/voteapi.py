@@ -1,6 +1,8 @@
-from models import session, ElectionRound
 import base64
 import json
+
+from models import session, ElectionRound, Person
+
 
 def setVote(elec_round, person):
     '''Person hat erfolgreich für diese Wahl abgestimmt'''
@@ -46,7 +48,37 @@ def getAllPersonsWhoVoted(elec_round_id: int) -> dict:
     return json.dumps(ret)
 
 def getAllPersonsWhoHaveNotVoted(elec_round_id: int) -> dict:
-    '''Gibt alle Personen zurück die noch Nicht gewählt haben'''
-    # TODO(Impl method)
-    pass
+    '''Get all persons who have not voted
+    
+    Warning: This is only accurate at the time of the election round, since 
+    people can leave (altering the is_present) after the election round.
+    '''
+    try:
+        elec_round = _get_electionround_by_id(elec_round_id)
+    except Exception as e:
+        return '{{ "Error" : "{}" }}'.format(str(e))
+    persons_voted = elec_round.persons_voted
+
+    # Get present people
+    persons_present = session.query(Person).filter(
+        Person.is_present == True).all()
+    session.commit()
+
+    # Get all persons who didn't vote but are present
+    persons_not_voted = []
+    for person in persons_present:
+        if person not in persons_voted:
+            persons_not_voted.append(person)
+
+    # Create response
+    ret = []
+    for person in persons_not_voted:
+        ret.append(
+            {
+                "id" : person.id,
+                "name" : person.name
+            }
+        )
+
+    return json.dumps(ret)
 

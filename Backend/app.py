@@ -1,12 +1,12 @@
 from flask import Flask, Response, request, render_template
 import logging
 import api.personapi
+import api.voteapi
 from models import Person, ElectionRound, Choice, session
 
 app = Flask(__name__)
 
 from api.choicesapi import createChoice, deleteChoice, readChoices, updateVotes
-from api.voteapi import getAllPersonsWhoVoted
 
 app = Flask(__name__)
 
@@ -181,6 +181,19 @@ def getAllPersonsWhoVoted():
         return api.voteapi.getAllPersonsWhoVoted(elec_round_id)
     else:
         return Response(status=405)
+
+@app.route('/api/vote/getAllPersonsWhoHaveNotVoted', methods =['GET'])
+def getAllPersonsWhoHaveNotVoted():
+    if request.method == 'GET':
+        elec_round_id = request.args.get('elec_round_id')
+        if elec_round_id is None:
+            resp = Response(status=400)
+            resp.set_data("elec_round_id required.")
+            return resp
+        return api.voteapi.getAllPersonsWhoHaveNotVoted(elec_round_id)
+    else:
+        return Response(status=405)
+
 
 
 @app.route('/')
