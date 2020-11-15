@@ -101,7 +101,7 @@ def checkOutFromElectionRound():
 def delete_choice(id):
     return deleteChoice(id)
 
-#POST: { "description": <string>, "electionId":<number> }; TODO: picture!
+#POST: { "description": <string>, "electionId":<number>, "picture":<base64string> };
 #RETURNS: { "id":<number>, "description?":<string>, "message?":<error message> }
 @app.route('/api/choice/', methods=['POST'])
 def create_choice():
