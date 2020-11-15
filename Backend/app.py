@@ -1,4 +1,3 @@
-from flask import Flask, Response, request, render_template
 import logging
 
 # from api.choicesapi import createChoice, deleteChoice, readChoices, updateVotes
@@ -10,7 +9,7 @@ import api.electionroundsapi
 import api.hasChoice
 
 from models import Person, ElectionRound, Choice, session
-
+from flask import Flask, Response, request, render_template
 
 app = Flask(__name__)
 
@@ -64,7 +63,7 @@ def approve_minimal_voters():
         return False
     else:
         return Response(status=405)
-     
+
 #POST { "userid":<number> } 
 #RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/persons/checkInForElectionRound', methods =['POST'])
@@ -74,6 +73,8 @@ def checkInForElectionRound():
         return Response(status=200)
     return Response(status= 500)
 
+#POST { "userid":<number> } 
+#RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/persons/checkOutFromElectionRound', methods =['POST'])
 def check_out_from_election_round():
     data = request.json
@@ -105,6 +106,8 @@ def read_choices(electionid):
 def update_votes_choices(choiceid):
     return api.choicesapi.update_votes(choiceid, request.json)
 
+#POST: { "title":<string>, "max_choices":<number> } 
+#RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/electionrounds/createElectionRound', methods =['POST'])
 def create_election_round():
     if request.method == 'POST':
@@ -113,16 +116,22 @@ def create_election_round():
             return Response(status=200)
         return Response(status= 500)
 
-@app.route('/api/electionrounds/getAllElectionRounds', methods =['Get'])
+#GET  
+#RETURNS: { "id":<number>, "title":<string>, "running":<string>, "max_choices_per_person":<number> }
+@app.route('/api/electionrounds/getAllElectionRounds', methods =['GET'])
 def get_election_rounds():
     if request.method == 'GET':
         return api.electionroundsapi.get_all_election_rounds()
 
-@app.route('/api/electionrounds/getAllOpenElections', methods =['Get'])
+#GET  
+#RETURNS: { "id":<number>, "title":<string>, "running":<string>, "max_choices_per_person":<number> }
+@app.route('/api/electionrounds/getAllOpenElections', methods =['GET'])
 def get_all_open_elections():
     if request.method == 'GET':
         return api.electionroundsapi.get_all_open_elections()
 
+#POST: { "electionroundid":<number> }  
+#RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/electionrounds/closeOpenElectionRound', methods =['POST'])
 def close_open_election_round():
     if request.method == 'POST':
@@ -131,6 +140,8 @@ def close_open_election_round():
             return Response(status=200)
         return Response(status= 500)
 
+#POST: { "choiceid":<number> }  
+#RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/electionrounds/addChoiceToElectionRound', methods =['POST'])
 def add_choice_to_election_round():
     if request.method == 'POST':
@@ -146,6 +157,8 @@ def get_result_of_election_round():
         data = request.json
         return api.electionroundsapi.get_result_of_election_round(data)
 
+#POST: { "receiverid":<number>, "senderid":<number> }  
+#RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/choiceproxy/createChoiceProxy', methods =['POST'])
 def create_choice_proxy():
     if request.method == 'POST':
@@ -154,12 +167,16 @@ def create_choice_proxy():
             return Response(status=200)
         return Response(status= 500)
 
+#DELETE: <number>  
+#RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/choiceproxy/<senderid>', methods=['DELETE'])
 def delete_choice_proxy(senderid):
     if api.hasChoice.delete_choice_proxy(senderid):
         return Response(status=200)
     return Response(status= 500)
 
+#POST: { "receiverid":<number>, "senderid":<number> }  
+#RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/choiceproxy/updateChoiceProxy', methods =['POST'])
 def update_choice_proxy():
     if request.method == 'POST':
@@ -168,7 +185,8 @@ def update_choice_proxy():
             return Response(status=200)
         return Response(status= 500)
 
-@app.route('/api/vote/getAllPersonsWhoVoted', methods =['GET'])
+#GET:   
+#RETURNS: TODO
 def get_all_persons_who_voted():
     if request.method == 'GET':
         elec_round_id = request.args.get('elec_round_id')
