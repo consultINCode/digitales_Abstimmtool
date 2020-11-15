@@ -1,9 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 /* Body, HTML 'n stuff */
-
-html,
-body,
-main {
+@import 'app/core/theme/consultIN.scss';
+html, body, main {
 	margin: 0;
 	padding: 0;
 	height: 100%;

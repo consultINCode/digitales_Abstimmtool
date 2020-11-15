@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import {PersonModule} from './person/person.module';
 import {LandingPageModule} from './landing-page/landing-page.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {ElectionModule} from "./election/election.module";
 
 
 @NgModule({
@@ -19,9 +20,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    BrowserAnimationsModule,
+    // own Modules
     PersonModule,
     LandingPageModule,
-    BrowserAnimationsModule
+    ElectionModule
   ],
   providers: [
     {provide: 'DEM_API_URL', useValue: environment.demApiUrl},

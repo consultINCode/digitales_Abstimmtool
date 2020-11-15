@@ -10,11 +10,11 @@ import {HttpPersonService} from '../service/http-person.service';
 export class PersonOverviewPageComponent implements OnInit {
 
     public persons: PersonInterface[];
+    public displayedColumns: string[] = ['name', 'is_present'];
 
     constructor(
         private personService: HttpPersonService
-    ) {
-    }
+    ) {}
 
     ngOnInit(): void {
         this.getPerson();

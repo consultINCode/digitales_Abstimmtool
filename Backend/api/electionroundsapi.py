@@ -1,14 +1,18 @@
+# pylint: disable=maybe-no-member
+
 import json
 import logging
 import sys
 import os
-from passlib.hash import argon2
+
+from models import ElectionRound, session, Choice
 from random import choice
 
+# TODO(What is this and why is it here??)
 PACKAGE_PARENT = '..'
 SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
 sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
-from models import ElectionRound,session, Choice
+
 
 #Helper
 def model_as_dict(self):
@@ -16,9 +20,8 @@ def model_as_dict(self):
 
 # Election Rounds
 
-
-#Erstellt eine Wahlrunde
-def createElectionRound(data): 
+def create_election_round(data: dict) -> bool: 
+    '''Creates an election round'''
     elec_round = ElectionRound()
     elec_round.title = data['title']
     elec_round.running = 'not_started'
@@ -30,9 +33,8 @@ def createElectionRound(data):
         return False
     return True
 
-
-#gibt alle Wahlrunden zurück
-def getAllElectionRounds():
+def get_all_election_rounds() -> str:
+    '''Returns all election rounds.'''
     elec_round_list = session.query(ElectionRound).all()
     session.commit()
     response = []
@@ -41,11 +43,10 @@ def getAllElectionRounds():
     
     return json.dumps(response)
 
-
-
-#git alle Wahlrunden zurück die aktive sind
-def getAllOpenElections():
-    elec_round_list = session.query(ElectionRound).filter(ElectionRound.running == "running").all()
+def get_all_open_elections() -> str:
+    '''Returns all active elections'''
+    elec_round_list = session.query(ElectionRound).filter(
+        ElectionRound.running == "running").all()
     session.commit()
     response = []
     for round in elec_round_list:
@@ -53,10 +54,10 @@ def getAllOpenElections():
     
     return json.dumps(response)
  
-# Schließt eine Wahlrunde 
-
-def closeOpenElectionRound(data):
-    electionround = session.query(ElectionRound).filter(ElectionRound.id == data['electionroundid']).first()
+def close_open_election_round(data: dict) -> bool:
+    '''Closes an election round.'''
+    electionround = session.query(ElectionRound).filter(
+        ElectionRound.id == data['electionroundid']).first()
     if electionround.running != "finished":
         electionround.running = "finished"
     try:
@@ -65,27 +66,25 @@ def closeOpenElectionRound(data):
         return False
     return True
  
-#Fügt Wahlmöglichkeiten der Wahlrunde hinzu.  
-def addChoiceToELectionRound(data):
-    choice = session.query(Choice).filter(Choice.id == data['choiceid']).first()
-    electionround = session.query(ElectionRound).filter(ElectionRound.id == data['electionroundid']).first()
+def add_choice_to_election_round(data: dict) -> bool:
+    '''Adds an choice to an election round.'''
+    choice = session.query(Choice).filter(
+        Choice.id == data['choiceid']).first()
+    electionround = session.query(ElectionRound).filter(
+        ElectionRound.id == data['electionroundid']).first()
     choice.election_round = electionround
     try:
          session.commit()
     except:
         return False
     return True
-
-'''
-### CheckIfElectionRoundIsOpen()
-Prüft ob die Wahlrunde noch offen ist
-Brauchen wir nicht, weil getAllOpenElections den gleichen sinn erfüllt
-'''
  
-# Gibt das Ergebnis der Wahlrunde zurück
-def getResultofElectionRound(data):
-    electionround = session.query(ElectionRound).filter(ElectionRound.id == data['electionroundid']).first()
-    choices_list = session.query(Choice).filter(Choice.election_round_id == electionround.id).all()
+def get_result_of_election_round(data: dict) -> str:
+    '''Returns the result of an election round.'''
+    electionround = session.query(ElectionRound).filter(
+        ElectionRound.id == data['electionroundid']).first()
+    choices_list = session.query(Choice).filter(
+        Choice.election_round_id == electionround.id).all()
     
     response = []
     for choice in choices_list:

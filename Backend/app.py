@@ -1,238 +1,240 @@
-from flask import Flask, Response, request, render_template
 import logging
+
+import api.choicesapi
 import api.personapi
 import api.voteapi
-from models import Person, ElectionRound, Choice, session
 import api.electionroundsapi
+# TODO(Why is this called hasChoice and no <name>api.py?)
 import api.hasChoice
-from api.choicesapi import createChoice, deleteChoice, readChoices, updateVotes
+
+from models import Person, ElectionRound, Choice, session
+from flask import Flask, Response, request, render_template
 
 app = Flask(__name__)
 
 # Init logging
 logging.basicConfig(filename='example.log', level=logging.DEBUG)
 
-# Some example log lines
-logging.info("test")
-logging.debug('This message should go to the log file')
-logging.info('So should this')
-logging.warning('And this, too')
-logging.error('And non-ASCII stuff, too, like Øresund and Malmö')
 
-
-# this function should be defined in your /api/modelname
-def yourfunction(data="test"):
-    print(data)
-
-
-# Blueprint for Flask Routes
-# copy and adapt :)
-@app.route('/api/modelname/function', methods=['GET', 'POST', 'DELETE', 'PUT'])
-def functionname():
-    if request.method == 'POST':
-        data = request.json
-        yourfunction(data)
-        return Response(status=200)
-    elif request.method == 'GET':
-        return yourfunction()
-    elif request.method == 'PUT':
-        data = request.json
-        yourfunction(data)
-        return Response(status=200)
-    elif request.method == 'DELETE':
-        data = request.json
-        yourfunction(data)
-        return Response(status=200)
-
+#GET
+#RETURNS: { [{ "id":<number>, "name":<string>, "password":<string>, "is_present":<boolean>, "role":<number as string> }] }
 @app.route('/api/persons/getAllPersons', methods =['GET'])
-def getallpersons():
-    return api.personapi.getAllPersons()
+def get_all_persons():
+    return api.personapi.get_all_persons()
 
+#GET
+#RETURNS: { [{ "id":<number>, "name":<string>, "password":<string>, "is_present":<boolean>, "role":<number as string> }] }
 @app.route('/api/persons/getAllPersonsCheckedIn', methods =['GET'])
-def getAllPersonsCheckedIn():
-    return api.personapi.getAllPersonsCheckedIn()
+def get_all_persons_checked_in():
+    return api.personapi.get_all_persons_checked_in()
 
+#GET
+#RETURNS: { [{ "id":<number>, "name":<string>, "password":<string>, "is_present":<boolean>, "role":<number as string> }] }
 @app.route('/api/persons/getAllPersonsCheckedOut', methods =['GET'])
-def getAllPersonsCheckedOut():
-    return api.personapi.getAllPersonsCheckedOut()
+def get_all_persons_checked_out():
+    return api.personapi.get_all_persons_checked_out()
      
+#POST { "name":<string> }
+#RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/persons/createPerson', methods =['POST'])
-def createPerson():
+def create_person():
     data = request.json
-    if api.personapi.createPerson(data):
+    if api.personapi.create_person(data):
         return Response(status=200)
     return Response(status= 500)
-
+     
+#DELETE { "userid":<number> } 
+#RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/persons/deletePerson', methods =['DELETE'])
-def deletePerson():
+def delete_person():
     data = request.json
-    if api.personapi.deletePerson(data):
+    if api.personapi.delete_person(data):
         return Response(status=200)
     return Response(status= 500)
 
 
 # TODO(Test)
 @app.route('/api/persons/approveMinimalVoters', methods =['GET', 'POST'])
-def approveMinimalVoters():
+def approve_minimal_voters():
     if request.method == 'GET':
-        if api.personapi.approveMinimalVoters():
+        if api.personapi.approve_minimal_voters():
             return True
         return False
     else:
         return Response(status=405)
 
+#POST { "userid":<number> } 
+#RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/persons/checkInForElectionRound', methods =['POST'])
 def checkInForElectionRound():
     data = request.json
-    if api.personapi.checkInForElectionRound(data):
+    if api.personapi.check_in_for_election_round(data):
         return Response(status=200)
     return Response(status= 500)
 
+#POST { "userid":<number> } 
+#RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/persons/checkOutFromElectionRound', methods =['POST'])
-def checkOutFromElectionRound():
+def check_out_from_election_round():
     data = request.json
-    if api.personapi.checkOutFromElectionRound(data):
+    if api.personapi.check_out_from_election_round(data):
         return Response(status=200)
     return Response(status= 500)
 
+#DELETE: { "id": <number> }
+#RETURNS: { "id":<number>, "deleted":<boolean> }
 @app.route('/api/choice/<id>', methods=['DELETE'])
 def delete_choice(id):
-    return deleteChoice(id)
+    return api.choicesapi.delete_choice(id)
 
-#POST: { "description": <string>, "electionId":<number> }; TODO: picture!
-#RETURNS: { "id":<number>, "description?":<string>, "message?":<error message> }
+#POST: { "description": <string>, "electionId":<number>, "picture?":<base64string> };
+#RETURNS: { "id":<number>, "updated":<boolean>, "message?":<error message> }
 @app.route('/api/choice/', methods=['POST'])
 def create_choice():
-    return createChoice(request.json)
+    return api.choicesapi.create_choice(request.json)
+
+#URL: <number>; POST: { "choiceid": <number>, "picture":<base64string> };
+#RETURNS: { "id":<number>, "description?":<string>, "message?":<error message> }
+@app.route('/api/choice/<choiceid>/updatePicture', methods=['POST'])
+def setPicture(choiceid):
+    return api.choicesapi.setPicture(choiceid, request.json)
 
 #URL: <number>
 #RETURNS: { [{ "id":<number>, "picture":<base64String>, "description":<string>, "counter":<number> }] }
 @app.route('/api/election/<electionid>', methods=['GET'])
 def read_choices(electionid):
-    return readChoices(electionid)
+    return api.choicesapi.read_choices(electionid)
 
 #URL: <number>; POST: { "votes": <number> }
 #RETURNS: { "id":<number>, "votes":<number>, "message?":<error message> }
 @app.route('/api/choice/vote/<choiceid>', methods=['POST'])
-def updateVotes_choices(choiceid):
-    return updateVotes(choiceid, request.json)
+def update_votes_choices(choiceid):
+    return api.choicesapi.update_votes(choiceid, request.json)
 
-#html template for test purpose
-@app.route('/test')
-def testpage():
-   return render_template('testpage.html')
-
+#POST: { "title":<string>, "max_choices":<number> } 
+#RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/electionrounds/createElectionRound', methods =['POST'])
-def createElectionRound():
+def create_election_round():
     if request.method == 'POST':
         data = request.json
-        if api.electionroundsapi.createElectionRound(data):
+        if api.electionroundsapi.create_election_round(data):
             return Response(status=200)
         return Response(status= 500)
 
-@app.route('/api/electionrounds/getAllElectionRounds', methods =['Get'])
-def getAllElectionRounds():
+#GET  
+#RETURNS: { "id":<number>, "title":<string>, "running":<string>, "max_choices_per_person":<number> }
+@app.route('/api/electionrounds/getAllElectionRounds', methods =['GET'])
+def get_election_rounds():
     if request.method == 'GET':
-        return api.electionroundsapi.getAllElectionRounds()
-@app.route('/api/electionrounds/getAllOpenElections', methods =['Get'])
-def getAllOpenElections():
-    if request.method == 'GET':
-        return api.electionroundsapi.getAllOpenElections()
+        return api.electionroundsapi.get_all_election_rounds()
 
+#GET  
+#RETURNS: { "id":<number>, "title":<string>, "running":<string>, "max_choices_per_person":<number> }
+@app.route('/api/electionrounds/getAllOpenElections', methods =['GET'])
+def get_all_open_elections():
+    if request.method == 'GET':
+        return api.electionroundsapi.get_all_open_elections()
+
+#POST: { "electionroundid":<number> }  
+#RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/electionrounds/closeOpenElectionRound', methods =['POST'])
-def closeOpenElectionRound():
+def close_open_election_round():
     if request.method == 'POST':
         data = request.json
-        if api.electionroundsapi.closeOpenElectionRound(data):
+        if api.electionroundsapi.close_open_election_round(data):
             return Response(status=200)
         return Response(status= 500)
 
-@app.route('/api/electionrounds/addChoiceToELectionRound', methods =['POST'])
-def addChoiceToELectionRound():
+#POST: { "choiceid":<number> }  
+#RETURNS: statuscode: True = 200, False = 500
+@app.route('/api/electionrounds/addChoiceToElectionRound', methods =['POST'])
+def add_choice_to_election_round():
     if request.method == 'POST':
         data = request.json
-        if api.electionroundsapi.addChoiceToELectionRound(data):
+        if api.electionroundsapi.add_choice_to_election_round(data):
             return Response(status=200)
         return Response(status= 500)
 
-@app.route('/api/electionrounds/getResultofElectionRound', methods =['POST'])
-def getResultofElectionRound():
+#GET
+# TODO(Change to get)
+@app.route('/api/electionrounds/getResultOfElectionRound', methods =['POST'])
+def get_result_of_election_round():
     if request.method == 'POST':
         data = request.json
-        return api.electionroundsapi.getResultofElectionRound(data)
+        return api.electionroundsapi.get_result_of_election_round(data)
 
+#POST: { "receiverid":<number>, "senderid":<number> }  
+#RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/choiceproxy/createChoiceProxy', methods =['POST'])
-def createChoiceProxy():
+def create_choice_proxy():
     if request.method == 'POST':
         data = request.json
-        if api.hasChoice.createChoiceProxy(data):
+        if api.hasChoice.create_choice_proxy(data):
             return Response(status=200)
         return Response(status= 500)
 
+#DELETE: <number>  
+#RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/choiceproxy/<senderid>', methods=['DELETE'])
-def deleteChoiceProxy(senderid):
-    if api.hasChoice.deleteChoiceProxy(senderid):
+def delete_choice_proxy(senderid):
+    if api.hasChoice.delete_choice_proxy(senderid):
         return Response(status=200)
     return Response(status= 500)
 
+#POST: { "receiverid":<number>, "senderid":<number> }  
+#RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/choiceproxy/updateChoiceProxy', methods =['POST'])
-def updateChoiceProxy():
+def update_choice_proxy():
     if request.method == 'POST':
         data = request.json
-        if api.hasChoice.updateChoiceProxy(data):
+        if api.hasChoice.update_choice_proxy(data):
             return Response(status=200)
         return Response(status= 500)
 
+#GET: elec_round_id=<number>
+#RETURNS: { "id":<number>, "name":<string> }
 @app.route('/api/vote/getAllPersonsWhoVoted', methods =['GET'])
-def getAllPersonsWhoVoted():
-    if request.method == 'GET':
-        elec_round_id = request.args.get('elec_round_id')
-        if elec_round_id is None:
-            resp = Response(status=400)
-            resp.set_data("elec_round_id required.")
-            return resp
-        return api.voteapi.get_all_persons_who_voted(elec_round_id)
-    else:
-        return Response(status=405)
+def get_all_persons_who_voted():
+    elec_round_id = request.args.get('elec_round_id')
+    if elec_round_id is None:
+        resp = Response(status=400)
+        resp.set_data("elec_round_id required.")
+        return resp
+    return api.voteapi.get_all_persons_who_voted(elec_round_id)
 
+#GET: elec_round_id=<number>
+#RETURNS: { "id":<number>, "name":<string> }
 @app.route('/api/vote/getAllPersonsWhoHaveNotVoted', methods =['GET'])
-def getAllPersonsWhoHaveNotVoted():
-    if request.method == 'GET':
-        elec_round_id = request.args.get('elec_round_id')
+def get_all_persons_who_have_not_voted():
+    elec_round_id = request.args.get('elec_round_id')
 
-        if elec_round_id is None:
-            resp = Response(status=400)
-            resp.set_data("elec_round_id required.")
-            return resp
+    if elec_round_id is None:
+        resp = Response(status=400)
+        resp.set_data("elec_round_id required.")
+        return resp
 
-        return api.voteapi.get_all_persons_who_have_not_voted(elec_round_id)
-    else:
-        return Response(status=405)
+    return api.voteapi.get_all_persons_who_have_not_voted(elec_round_id)
 
+#GET: { "elec_round_id":<number>, "person_id":<number> }
+#RETURNS: { "Result?":<string>, "Error?":<string> }
 @app.route('/api/vote/setVote', methods =['POST'])
-def setVote():
-    if request.method == 'POST':
-        data = request.json
-        if data is None:
-            resp = Response(status=400)
-            resp.set_data("elec_round_id and person_id required.")
-            return resp
+def set_vote():
+    data = request.json
+    if data is None:
+        resp = Response(status=400)
+        resp.set_data("elec_round_id and person_id required.")
+        return resp
 
-        elec_round_id = data['elec_round_id']
-        person_id = data['person_id']
+    elec_round_id = data['elec_round_id']
+    person_id = data['person_id']
 
-        if (elec_round_id is None) or (person_id is None):
-            resp = Response(status=400)
-            resp.set_data("elec_round_id and person_id required.")
-            return resp
+    if (elec_round_id is None) or (person_id is None):
+        resp = Response(status=400)
+        resp.set_data("elec_round_id and person_id required.")
+        return resp
         
-        return api.voteapi.set_vote(elec_round_id, person_id)
-    else:
-        return Response(status=405)
+    return api.voteapi.set_vote(elec_round_id, person_id)
 
-@app.route('/')
-def answer():
-    return "HelloWOrd"
 
 if __name__ == "__main__":
     app.run()

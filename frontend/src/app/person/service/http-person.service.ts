@@ -18,4 +18,8 @@ export class HttpPersonService {
         return this.http.get<PersonInterface[]>(this.demUrl + 'persons/getAllPersons');
     }
 
+    public setPerson(person: PersonInterface): Observable<any> {
+        return this.http.post<any>(this.demUrl + 'persons/createPerson', person);
+    }
+
 }

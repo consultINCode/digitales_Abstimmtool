@@ -15,13 +15,19 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 function updateVotes() {
-    console.log('update')
-    var xhttp = new XMLHttpRequest();
+	const formData = new FormData();
+    const xhttp = new XMLHttpRequest();
+    xhttp.open("POST", `http://localhost:5000/api/choice/`, true);
+    
+    const file = document.getElementById("choiceImage").files[0];
     const data = {
         description: document.getElementById('description').value,
-        picture: document.getElementById('picture'),
         electionId: document.getElementById('electionId').value,
     }
+
+    formData.append("json", data);
+	if (file) formData.append("image", file);
+
     xhttp.onload = function() {
       const json = JSON.parse(this.responseText)
       !json.message
@@ -29,9 +35,11 @@ function updateVotes() {
         : document.getElementById("result").innerHTML=json.message;
       
     };
-    xhttp.open("POST", `http://localhost:5000/api/choice/`, true);
-    xhttp.setRequestHeader("Content-type", "application/json")
-    xhttp.send(JSON.stringify(data));
+    for (var [key, value] of formData.entries()) { 
+        console.log(key, value);
+    }
+    // xhttp.setRequestHeader("Content-type", "multipart/form-data")
+    xhttp.send(formData);
   }
 </script>
 </head>
@@ -42,7 +50,7 @@ function updateVotes() {
 
 <div>
     <h3>Post to updateVotes</h3>
-    <form id='votesform'>
+    <form id='votesform' method="POST" enctype="multipart/form-data" action="/">
         <label>
             Description: 
             <input id=description type="text">
@@ -50,6 +58,10 @@ function updateVotes() {
         <label>
             Election ID: 
             <input id=electionId type="number">
+        </label>
+        <label>
+            Image: 
+            <input id=choiceImage type="file">
         </label>
         <button type="submit"></button>
     </form>

@@ -1,32 +1,57 @@
-from sqlalchemy import create_engine
+# pylint: disable=maybe-no-member
+import configparser
+
+from sqlalchemy import (
+    Boolean,
+    create_engine,
+    Column,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+    Table
+)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, backref
-from sqlalchemy import Column, Integer, String, Text, Boolean
-from sqlalchemy import ForeignKey
-from sqlalchemy import Table
 
-engine = create_engine('sqlite:///test.db', echo=False)
+
+# Init configparser
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+engine = create_engine(
+    config['DB']['db_con_string'], 
+    echo=(config['DB']['echo'] == "True")) # Hacky conversion
 Base = declarative_base()
 
-#Linking Table for Votes per Electionround
+# Linking Table for Votes per Electionround
 has_voted_table = Table('has_voted_table', Base.metadata,
-     Column('has_voted_in_election_round_id', Integer, ForeignKey('election_rounds.id')),
+     Column(
+         'has_voted_in_election_round_id', 
+         Integer, 
+         ForeignKey('election_rounds.id')
+    ),
      Column('person_id', Integer, ForeignKey('persons.id'))
 )
 
-#Special Table recording the relationships of members who were elected to cast the vote for others
+# Special Table recording the relationships of members who were elected to 
+# cast the vote for others
 has_choice_proxy_table = Table('has_choice_proxy_table', Base.metadata,
      Column('receiver_id', Integer, ForeignKey('persons.id')),
      Column('sender_id', Integer, ForeignKey('persons.id'), unique = True)
 )
+
+
 class ElectionRound(Base):
     ''' An single election round for on position / decision '''
     __tablename__ = 'election_rounds'
     id = Column(Integer, primary_key=True)
     title = Column(String, nullable=False)
-    running = Column(String, nullable=False) # "not_started" , "running" , "finished"
+    # Values of running: "not_started" , "running" , "finished"
+    running = Column(String, nullable=False) 
     max_choices_per_person = Column(Integer, nullable=False)
-    
+
+
 class Choice(Base):
     '''A Single Choice for an Election round'''
     __tablename__ = 'choices'
@@ -47,9 +72,15 @@ class Person(Base):
     name = Column(String, nullable=False)
     password = Column(String, nullable=False)
     is_present = Column(Boolean, nullable=False)
-    role = Column(String, nullable=False) # 0 = Admin; 1 = User, 2 = Election Supervisor, 3 = Admin Election Supervisor
+    # Values of role: 
+    #   0 = Admin
+    #   1 = User 
+    #   2 = Election Supervisor
+    #   3 = Admin Election Supervisor
+    role = Column(String, nullable=False) 
     
-    voted_in_election_round = relationship("ElectionRound", secondary=has_voted_table, backref="persons_voted")
+    voted_in_election_round = relationship(
+        "ElectionRound", secondary=has_voted_table, backref="persons_voted")
 
     # Handling for Many-To-Many in one Table
     # Relationship records members who gave their vote to someone else
@@ -70,82 +101,54 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
-       
-## ADD SOME TEST DATA INTO DB
+if config['DB']['add_test_data'] == "True":     
+    ## ADD SOME TEST DATA INTO DB
+    ## Person
+    p1 = Person()
+    p1.name = "Anna"
+    p1.password = "hunter2"
+    p1.is_present = True
+    p1.role = 0
 
+    p2 = Person()
+    p2.name = "Bob"
+    p2.password = "lol123"
+    p2.is_present = False
+    p2.role = 1
 
-## Person
-p1 = Person()
-p1.name = "Anna"
-p1.password = "hunter2"
-p1.is_present = True
-p1.role = 0
+    ## Elec-Rounds
+    elec_round = ElectionRound()
+    elec_round.title = "Braucht Ihr Pause?"
+    elec_round.running = "running"
+    elec_round.max_choices_per_person = 1
 
-p2 = Person()
-p2.name = "Bob"
-p2.password = "lol123"
-p2.is_present = False
-p2.role = 1
+    ## Choices
+    ch1 = Choice()
+    ch1.picture = "beer.png"
+    ch1.description = "Ja!"
+    ch1.counter = 4
+    #ch2.elec_round = elec_round
 
-## Elec-Rounds
-elec_round = ElectionRound()
-elec_round.title = "Braucht Ihr Pause?"
-elec_round.running = "running"
-elec_round.max_choices_per_person = 1
+    ch2 = Choice()
+    ch2.picture = "working.jpg"
+    ch2.description = "Ne, passt..."
+    ch2.counter = 2
+    ch2.election_round = elec_round
 
-## Choices
-ch1 = Choice()
-ch1.picture = "beer.png"
-ch1.description = "Ja!"
-ch1.counter = 4
-#ch2.elec_round = elec_round
+    # RELATIONSHIP (pls work)
 
-ch2 = Choice()
-ch2.picture = "working.jpg"
-ch2.description = "Ne, passt..."
-ch2.counter = 2
-ch2.election_round = elec_round
+    # The example Choice belongs to the first Election Round 
+    ch1.election_round = elec_round
+    # Anna and Bob both Voted in the first Election Round
+    p1.voted_in_election_round.append(elec_round)
+    p2.voted_in_election_round.append(elec_round)
+    # Anna has Bobs Vote
+    p1.received_proxy_vote.append(p2)
 
-# RELATIONSHIP (pls work)
+    session.add(p1)
+    session.add(p2)
+    session.add(elec_round)
+    session.add(ch1)
+    session.add(ch2)
 
-# The example Choice belongs to the first Election Round 
-ch1.election_round = elec_round
-# Anna and Bob both Voted in the first Election Round
-p1.voted_in_election_round.append(elec_round)
-p2.voted_in_election_round.append(elec_round)
-# Anna has Bobs Vote
-p1.received_proxy_vote.append(p2)
-
-session.add(p1)
-session.add(p2)
-session.add(elec_round)
-session.add(ch1)
-session.add(ch2)
-
-session.commit()
-
-
-
-
-# Relationships Basic How To:
-
-# class Customer(Base):
-#    __tablename__ = 'customers'
-
-#    id = Column(Integer, primary_key = True)
-#    name = Column(String)
-#    address = Column(String)
-#    email = Column(String)
-
-# class Invoice(Base):
-#    __tablename__ = 'invoices'
-   
-#    id = Column(Integer, primary_key = True)
-#    custid = Column(Integer, ForeignKey('customers.id'))
-#    invno = Column(Integer)
-#    amount = Column(Integer)
-#    customer = relationship("Customer", back_populates = "invoices")
-
-# c1 = Customer(name = "Gopal Krishna", address = "Bank Street Hydarebad", email = "gk@gmail.com")
-# c1.invoices = [Invoice(invno = 10, amount = 15000), Invoice(invno = 14, amount = 3850)]
-
+    session.commit()
