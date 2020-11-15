@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 // own modules
 import {PersonModule} from './person/person.module';
 import {LandingPageModule} from './landing-page/landing-page.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import {LandingPageModule} from './landing-page/landing-page.module';
     AppRoutingModule,
     HttpClientModule,
     PersonModule,
-    LandingPageModule
+    LandingPageModule,
+    BrowserAnimationsModule
   ],
   providers: [
     {provide: 'DEM_API_URL', useValue: environment.demApiUrl},
