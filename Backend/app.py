@@ -106,6 +106,7 @@ def delete_choice(id):
 #RETURNS: { "id":<number>, "description?":<string>, "message?":<error message> }
 @app.route('/api/choice/', methods=['POST'])
 def create_choice():
+    print(str(request.files))
     return createChoice(request.json)
 
 #URL: <number>

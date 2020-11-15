@@ -10,4 +10,4 @@ cd Backend && python -m flask run
 ```
 
 ### hot module reload
-`FLASK_APP=main.py FLASK_ENV=development flask run`
+`FLASK_APP=app.py FLASK_ENV=development flask run`
