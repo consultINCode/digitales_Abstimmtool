@@ -1,0 +1,11 @@
+@import '../../../../node_modules/@angular/material/theming';
+
+@include mat-core();
+
+$consultIN-theme-primary: mat-palette($mat-blue);
+$consultIN-theme-accent: mat-palette($mat-light-blue);
+$consultIN-theme-warn: mat-palette($mat-red);
+
+$consultIN-theme: mat-light-theme($consultIN-theme-primary, $consultIN-theme-accent, $consultIN-theme-warn);
+
+@include  angular-material-theme($consultIN-theme);
