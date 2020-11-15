@@ -16,6 +16,7 @@ def getAllPersonsWhoVoted(elec_round_id: int) -> dict:
     except ValueError:
         return '{ "Error" : "elec_round_id has to be an int (base 10)." }'
 
+    # Get ElectionRound object from the DB.
     elec_round = session.query(ElectionRound).filter_by(
             id=elec_round_id
         ).first()
@@ -25,6 +26,7 @@ def getAllPersonsWhoVoted(elec_round_id: int) -> dict:
     if elec_round is None:
         return '{ "Error" : "No electionround for this id." }'
 
+    # Build and return dict
     ret = []
     for person in elec_round.persons_voted:
         ret.append(
