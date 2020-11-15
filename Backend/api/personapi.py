@@ -28,7 +28,7 @@ def model_as_dict(self):
 # Gibt alle Benutzer zurück die in der Anwendung hinterlegt sind.
 def getAllPersons():
     persons = session.query(Person).all()
-    session.commit()
+    
     print(persons)
     response = [] 
     for person in persons:
@@ -36,6 +36,7 @@ def getAllPersons():
 
     json_response = json.dumps(response)
     print(json_response)
+    session.commit()
     return json_response
     
 
