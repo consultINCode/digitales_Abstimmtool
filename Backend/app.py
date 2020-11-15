@@ -4,17 +4,32 @@ import api.choicesapi
 import api.personapi
 import api.voteapi
 import api.electionroundsapi
+
 # TODO(Why is this called hasChoice and no <name>api.py?)
 import api.hasChoice
 
+from flask_swagger_ui import get_swaggerui_blueprint
 from models import Person, ElectionRound, Choice, session
 from flask import Flask, Response, request, render_template
 
 app = Flask(__name__)
 
+
 # Init logging
 logging.basicConfig(filename='example.log', level=logging.DEBUG)
 
+### swagger specific ###
+SWAGGER_URL = '/swagger'
+API_URL = '/static/swagger.json'
+SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': "Seans-Python-Flask-REST-Boilerplate"
+    }
+)
+app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
+### end swagger specific ###
 
 #GET
 #RETURNS: { [{ "id":<number>, "name":<string>, "password":<string>, "is_present":<boolean>, "role":<number as string> }] }
