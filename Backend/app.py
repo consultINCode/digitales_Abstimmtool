@@ -1,11 +1,15 @@
 from flask import Flask, Response, request, render_template
 import logging
+
+# from api.choicesapi import createChoice, deleteChoice, readChoices, updateVotes
+import api.choicesapi
 import api.personapi
 import api.voteapi
-from models import Person, ElectionRound, Choice, session
 import api.electionroundsapi
 import api.hasChoice
-from api.choicesapi import createChoice, deleteChoice, readChoices, updateVotes
+
+from models import Person, ElectionRound, Choice, session
+
 
 app = Flask(__name__)
 
@@ -80,25 +84,25 @@ def check_out_from_election_round():
 #RETURNS: { "id":<number>, "deleted":<boolean> }
 @app.route('/api/choice/<id>', methods=['DELETE'])
 def delete_choice(id):
-    return deleteChoice(id)
+    return api.choicesapi.delete_choice(id)
 
 #POST: { "description": <string>, "electionId":<number>, "picture":<base64string> };
 #RETURNS: { "id":<number>, "description?":<string>, "message?":<error message> }
 @app.route('/api/choice/', methods=['POST'])
 def create_choice():
-    return createChoice(request.json)
+    return api.choicesapi.create_choice(request.json)
 
 #URL: <number>
 #RETURNS: { [{ "id":<number>, "picture":<base64String>, "description":<string>, "counter":<number> }] }
 @app.route('/api/election/<electionid>', methods=['GET'])
 def read_choices(electionid):
-    return readChoices(electionid)
+    return api.choicesapi.read_choices(electionid)
 
 #URL: <number>; POST: { "votes": <number> }
 #RETURNS: { "id":<number>, "votes":<number>, "message?":<error message> }
 @app.route('/api/choice/vote/<choiceid>', methods=['POST'])
 def update_votes_choices(choiceid):
-    return updateVotes(choiceid, request.json)
+    return api.choicesapi.update_votes(choiceid, request.json)
 
 @app.route('/api/electionrounds/createElectionRound', methods =['POST'])
 def create_election_round():

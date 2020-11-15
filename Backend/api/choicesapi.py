@@ -3,7 +3,7 @@ import base64
 import json
 
 
-def readChoices(electionid):
+def read_choices(electionid):
     choices = session.query(Choice).filter_by(election_round_id=electionid)
     liste = []
     for choice in choices:
@@ -11,7 +11,7 @@ def readChoices(electionid):
     return json.dumps(liste)
 
 
-def createChoice(data):
+def create_choice(data):
     choice = Choice(description=data['description'], counter=0, picture=data["image"], election_round_id=data['electionId'])
     session.add(choice)
     session.commit()
@@ -20,7 +20,7 @@ def createChoice(data):
     return json.dumps({'id':-1, 'message': 'Failed to insert choice '})
 
 
-def deleteChoice(choiceid):
+def delete_choice(choiceid):
     choice = session.query(Choice).get(choiceid)
     if choice:
         session.delete(choice)
@@ -28,7 +28,7 @@ def deleteChoice(choiceid):
         return json.dumps({'id':choiceid, 'deleted': True})
     return json.dumps({'id':choiceid, 'deleted': False})
 
-def updateVotes(choiceId, votes):
+def update_votes(choiceId, votes):
     if not votes['votes'].isdigit():
         return json.dumps({'id':'error', 'votes': -1, 'message':'Not a number'})
     choice = session.query(Choice).get(choiceId)
