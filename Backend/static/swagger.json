@@ -1,11 +1,11 @@
 {
     "openapi": "3.0.0",
     "info": {
-      "description": "sean",
+      "description": "Das digitale Abstimmungstool der studentischen Unternehmensberatung consult.IN",
       "version": "1.0.0",
-      "title": "Seans-Python3-Flask-Rest-Boilerplate",
+      "title": "consult.IN Abstimmungstool API",
       "contact": {
-        "email": "seanwasere@gmail.com"
+        "email": "placeholder@consiltin.net"
       },
       
       "license": {
@@ -20,60 +20,294 @@
       ],
       "tags": [
         {
-          "name": "Book Request",
-          "description": "Example API for requesting and return book requests"
+          "name": "Persons",
+          "description": "Example API for requesting and return persons"
         }
       ],
-    "components": {
-      "schemas": {
-        "id": {
-          "properties": {
-            "uuid": {
-              "type": "string"
-            }
-          }
-        },
-        "bookRequestPostBody": {
-          "type": "object",
-          "properties": {
-            "title": {
-              "type": "string",
-              "format": "string"
-            },
-            "email": {
-              "type": "string",
-              "format": "email"
-            }
-          }
-        },
-        "bookRequest": {
-          "type": "object",
-          "properties": {
-            "title": {
-              "type": "string",
-              "format": "string"
-            },
-            "email": {
-              "type": "string",
-              "format": "email"
-            },
-            "timestamp": {
-              "type": "string",
-              "format": "number"
-            }
-          }
-        },
-        "bookRequests": {
-          "type": "object",
-          "properties": {
-            "bookRequest": {
-              "type": "object",
-              "additionalProperties": {
-                "$ref": "#/components/schemas/bookRequest"
+      "paths": {
+        "/api/persons/getAllPersons": {
+          "get": {
+            "tags": [
+              "Person"
+            ],
+            "summary": "Returns all persons",
+            "responses": {
+              "200": {
+                "description": "OK",
+                "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Person"
+                    }
+                }
               }
             }
           }
-        }
+        },
+        "/api/persons/getAllPersonsCheckedIn": {
+            "get": {
+              "tags": [
+                "Person"
+              ],
+              "summary": "Returns all persons",
+              "responses": {
+                "200": {
+                  "description": "OK",
+                  "schema": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Person"
+                      }
+                  }
+                }
+              }
+            }
+          },
+          "/api/persons/getAllPersonsCheckedOut": {
+            "get": {
+              "tags": [
+                "Person"
+              ],
+              "summary": "Returns all persons",
+              "responses": {
+                "200": {
+                  "description": "OK",
+                  "schema": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Person"
+                      }
+                  }
+                }
+              }
+            }
+          },
+          "/api/persons/createPerson": {
+            "post": {
+                "tags": [
+                  "Person"
+                ],
+                "summary": "Create a new person",
+                "requestBody": {
+                  "description": "Person Object",
+                  "required": true,
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                          "type": "object",
+                          "properties":{
+                              "name": {
+                                  "type" : "string",
+                                  "format" : "string"
+                              }
+                          }
+                        }
+                    }
+                  }
+                },
+                "produces": [
+                  "application/json"
+                ],
+                "responses": {
+                  "200": {
+                    "description": "OK"
+                  },
+                  "500": {
+                    "description": "Failed. Bad post data."
+                  }
+                }
+              }
+      },
+      "/api/persons/deletePerson": {
+        "delete": {
+            "tags": [
+              "Person"
+            ],
+            "summary": "Delete a new person",
+            "requestBody": {
+              "description": "Person Object",
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                      "type": "object",
+                      "properties":{
+                          "userid": {
+                              "type" : "integer"
+                          }
+                      }
+                    }
+                }
+              }
+            },
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "200": {
+                "description": "OK"
+              },
+              "500": {
+                "description": "Failed. Bad post data."
+              }
+            }
+          }
+    },
+    "/api/persons/checkInForElectionRound": {
+        "post": {
+            "tags": [
+              "Person"
+            ],
+            "summary": "Checks in a person",
+            "requestBody": {
+              "description": "Person Object",
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                      "type": "object",
+                      "properties":{
+                          "userid": {
+                              "type" : "integer"
+                          }
+                      }
+                    }
+                }
+              }
+            },
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "200": {
+                "description": "OK"
+              },
+              "500": {
+                "description": "Failed. Bad post data."
+              }
+            }
+          }
+    },
+    "/api/persons/checkOutFromElectionRound": {
+        "post": {
+            "tags": [
+              "Person"
+            ],
+            "summary": "Checks out a person",
+            "requestBody": {
+              "description": "Person Object",
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                      "type": "object",
+                      "properties":{
+                          "userid": {
+                              "type" : "integer"
+                          }
+                      }
+                    }
+                }
+              }
+            },
+            "produces": [
+              "application/json"
+            ],
+            "responses": {
+              "200": {
+                "description": "OK"
+              },
+              "500": {
+                "description": "Failed. Bad post data."
+              }
+            }
+          }
+    }
+    },
+    "components": {
+      "schemas": {
+        "ElectionRound": {
+          "type": "object",
+          "properties": {
+            "id" : {
+                "type" :"integer",
+                "format" : "integer"
+            },
+            "title": {
+              "type": "string",
+              "format": "string"
+            },
+            "running": {
+              "type": "string",
+              "format": "string"
+            }
+          }
+        },
+        "Choice": {
+            "type": "object",
+            "properties": {
+              "id" : {
+                  "type" :"integer"
+              },
+              "picture": {
+                "type": "string",
+                "format": "byte"
+              },
+              "discription": {
+                "type": "string",
+                "format": "string"
+              },
+              "counter" : {
+                "type" :"integer",
+                "format" : "integer"
+            }
+            }
+          },
+          "Person": {
+            "type": "object",
+            "properties": {
+              "id" : {
+                  "type" :"integer"
+              },
+              "name": {
+                "type": "string",
+                "format": "string"
+              },
+              "password": {
+                "type": "string",
+                "format": "string"
+              },
+              "is_present": {
+                "type": "boolean",
+                "format": "string"
+              },
+              "role" : {
+                "type" :"integer"
+            }
+            }
+          },
+          "has_choice_proxy_table": {
+            "type": "object",
+            "properties": {
+              "receiver_id" : {
+                  "type" :"integer"
+              },
+              "sender_id" : {
+                "type" :"integer"
+            }  
+            }
+          },
+          "has_voted_table": {
+            "type": "object",
+            "properties": {
+              "has_voted_in_election_round_id" : {
+                  "type" :"integer"
+              },
+              "person_id" : {
+                "type" :"integer"
+            }  
+            }
+          }
       }
     }
   }
