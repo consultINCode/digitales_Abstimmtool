@@ -1,7 +1,7 @@
 <header class="normal-padding centered shadow deco-bar">
   <h1>consult.IN Voting Tool</h1>
-  <nav *ngFor="let link of links">
-    <li><a href="{{link.route}}">{{link.name}}</a></li>
+  <nav>
+    <li *ngFor="let link of links"><a href="{{link.route}}">{{link.name}}</a></li>
   </nav>
 </header>
 <main>

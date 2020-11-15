@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {FormBuilder} from "@angular/forms";
-import {PersonInterface} from "../../person/Interface/Person.Interface";
+import {ElectionRoundInterface} from "../Interface/ElectionRound.Interface";
+import {HttpElectionRoundService} from "../service/http-election-round.service";
 
 @Component({
     selector: 'app-create-election-page',
@@ -25,12 +26,20 @@ export class CreateElectionRoundPageComponent {
 
     constructor(
         private formBuilder: FormBuilder,
+        private httpElectionRoundService: HttpElectionRoundService
     ) {
     }
 
 
     public submitForm() {
-        let person = this.electionForm.value as PersonInterface;
-        //TODO: implement Service
+        let electionRound = this.electionForm.value as ElectionRoundInterface;
+        this.httpElectionRoundService.setElectionRound(electionRound).subscribe(
+            (success: any) => {
+                alert('success');
+            },
+            (error: any) => {
+                alert('error');
+            }
+        );
     }
 }
