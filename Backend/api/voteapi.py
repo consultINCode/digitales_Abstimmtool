@@ -4,11 +4,6 @@ import json
 from models import session, ElectionRound, Person
 
 
-def setVote(elec_round, person):
-    '''Person hat erfolgreich für diese Wahl abgestimmt'''
-    # TODO(Impl method)
-    pass
-
 def _get_electionround_by_id(elec_round_id: int) -> ElectionRound:
     # Elec_round_id should be int
     try:
@@ -27,6 +22,35 @@ def _get_electionround_by_id(elec_round_id: int) -> ElectionRound:
         raise Exception("No electionround for this id.")
     
     return elec_round
+
+
+def setVote(elec_round_id: int, person_id: int) -> dict:
+    '''Person hat erfolgreich für diese Wahl abgestimmt'''
+    # Get election_round
+    try:
+        elec_round = _get_electionround_by_id(elec_round_id)
+    except Exception as e:
+        return '{{ "Error" : "{}" }}'.format(str(e))
+
+    # Get person
+    try:
+        elec_round_id = int(elec_round_id)
+    except ValueError:
+        return '{ "Error" : "person_id has to be an int (base 10)."}'
+
+    person = session.query(Person).filter_by(
+            id=person_id
+        ).first()
+    session.commit()
+
+    if person is None:
+        return '{ "Error" : "No persion for this id."}'
+
+    # Add person to election_round
+    elec_round.persons_voted.append(person)
+    session.commit()
+
+    return '{ "Result" : "OK" }'
 
 def getAllPersonsWhoVoted(elec_round_id: int) -> dict:
     '''Gibt alle Personen zurück die in der Wahlrunde schon gewählt haben'''

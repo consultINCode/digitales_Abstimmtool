@@ -186,15 +186,36 @@ def getAllPersonsWhoVoted():
 def getAllPersonsWhoHaveNotVoted():
     if request.method == 'GET':
         elec_round_id = request.args.get('elec_round_id')
+
         if elec_round_id is None:
             resp = Response(status=400)
             resp.set_data("elec_round_id required.")
             return resp
+
         return api.voteapi.getAllPersonsWhoHaveNotVoted(elec_round_id)
     else:
         return Response(status=405)
 
+@app.route('/api/vote/setVote', methods =['POST'])
+def setVote():
+    if request.method == 'POST':
+        data = request.json
+        if data is None:
+            resp = Response(status=400)
+            resp.set_data("elec_round_id and person_id required.")
+            return resp
 
+        elec_round_id = data['elec_round_id']
+        person_id = data['person_id']
+
+        if (elec_round_id is None) or (person_id is None):
+            resp = Response(status=400)
+            resp.set_data("elec_round_id and person_id required.")
+            return resp
+        
+        return api.voteapi.setVote(elec_round_id, person_id)
+    else:
+        return Response(status=405)
 
 @app.route('/')
 def answer():
