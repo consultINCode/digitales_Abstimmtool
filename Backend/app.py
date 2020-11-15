@@ -6,6 +6,7 @@ import api.choicesapi
 import api.personapi
 import api.voteapi
 import api.electionroundsapi
+# TODO(Why is this called hasChoice and no <name>api.py?)
 import api.hasChoice
 
 from models import Person, ElectionRound, Choice, session
@@ -149,13 +150,13 @@ def get_result_of_election_round():
 def create_choice_proxy():
     if request.method == 'POST':
         data = request.json
-        if api.hasChoice.createChoiceProxy(data):
+        if api.hasChoice.create_choice_proxy(data):
             return Response(status=200)
         return Response(status= 500)
 
 @app.route('/api/choiceproxy/<senderid>', methods=['DELETE'])
 def delete_choice_proxy(senderid):
-    if api.hasChoice.deleteChoiceProxy(senderid):
+    if api.hasChoice.delete_choice_proxy(senderid):
         return Response(status=200)
     return Response(status= 500)
 
@@ -163,7 +164,7 @@ def delete_choice_proxy(senderid):
 def update_choice_proxy():
     if request.method == 'POST':
         data = request.json
-        if api.hasChoice.updateChoiceProxy(data):
+        if api.hasChoice.update_choice_proxy(data):
             return Response(status=200)
         return Response(status= 500)
 
