@@ -5,7 +5,8 @@
         </h2>
     </div>
     <div class="deco-bar card shadow">
-        <table mat-table [dataSource]="persons" class="person-table ">
+        <mat-spinner *ngIf="!persons"></mat-spinner>
+        <table mat-table *ngIf="persons" [dataSource]="persons" class="person-table ">
           
             <ng-container matColumnDef="name">
               <th mat-header-cell *matHeaderCellDef> Name </th>
@@ -23,5 +24,4 @@
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
           </table>
     </div>
-
 </div>
