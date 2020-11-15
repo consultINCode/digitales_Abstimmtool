@@ -178,7 +178,7 @@ def getAllPersonsWhoVoted():
             resp = Response(status=400)
             resp.set_data("elec_round_id required.")
             return resp
-        return api.voteapi.getAllPersonsWhoVoted(elec_round_id)
+        return api.voteapi.get_all_persons_who_voted(elec_round_id)
     else:
         return Response(status=405)
 
@@ -192,7 +192,7 @@ def getAllPersonsWhoHaveNotVoted():
             resp.set_data("elec_round_id required.")
             return resp
 
-        return api.voteapi.getAllPersonsWhoHaveNotVoted(elec_round_id)
+        return api.voteapi.get_all_persons_who_have_not_voted(elec_round_id)
     else:
         return Response(status=405)
 
@@ -213,7 +213,7 @@ def setVote():
             resp.set_data("elec_round_id and person_id required.")
             return resp
         
-        return api.voteapi.setVote(elec_round_id, person_id)
+        return api.voteapi.set_vote(elec_round_id, person_id)
     else:
         return Response(status=405)
 

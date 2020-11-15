@@ -5,6 +5,7 @@ from models import session, ElectionRound, Person
 
 
 def _get_electionround_by_id(elec_round_id: int) -> ElectionRound:
+    '''get election round by id and handle errors'''
     # Elec_round_id should be int
     try:
         elec_round_id = int(elec_round_id)
@@ -24,8 +25,8 @@ def _get_electionround_by_id(elec_round_id: int) -> ElectionRound:
     return elec_round
 
 
-def setVote(elec_round_id: int, person_id: int) -> dict:
-    '''Person hat erfolgreich für diese Wahl abgestimmt'''
+def set_vote(elec_round_id: int, person_id: int) -> dict:
+    '''Add a person to the as has voted to the election_round'''
     # Get election_round
     try:
         elec_round = _get_electionround_by_id(elec_round_id)
@@ -52,8 +53,9 @@ def setVote(elec_round_id: int, person_id: int) -> dict:
 
     return '{ "Result" : "OK" }'
 
-def getAllPersonsWhoVoted(elec_round_id: int) -> dict:
-    '''Gibt alle Personen zurück die in der Wahlrunde schon gewählt haben'''
+def get_all_persons_who_voted(elec_round_id: int) -> dict:
+    '''Return all persons as dict who have already participated in
+    an election round.'''
     
     try:
         elec_round = _get_electionround_by_id(elec_round_id)
@@ -71,7 +73,7 @@ def getAllPersonsWhoVoted(elec_round_id: int) -> dict:
         )
     return json.dumps(ret)
 
-def getAllPersonsWhoHaveNotVoted(elec_round_id: int) -> dict:
+def get_all_persons_who_have_not_voted(elec_round_id: int) -> dict:
     '''Get all persons who have not voted
     
     Warning: This is only accurate at the time of the election round, since 
