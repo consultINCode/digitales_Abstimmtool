@@ -1,0 +1,16 @@
+<div class="centered">
+    <div class="card centered shadow deco-bar normal-margin">
+        <h2 class="normal-margin">
+            Liste aller tendenziell wahlberechtigten Mitglieder
+        </h2>
+    </div>
+
+    <div class="card centered shadow deco-bar normal-margin">
+        <ul id="personlist" *ngFor="let person of persons">
+            <li>
+                <span>{{person.name}}</span>
+                <span>{{person.is_present}}</span>
+            </li>
+        </ul>
+    </div>
+</div>

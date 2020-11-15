@@ -1,0 +1,13 @@
+<div class="example-container">
+    <form class="example-form" [formGroup]="personForm">
+        <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput type="text" formControlName="name" placeholder="Name" required>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Anwesend</mat-label>
+            <input matInput type="text" formControlName="is_present" placeholder="Anwesend" required>
+        </mat-form-field>
+    </form>
+</div>
