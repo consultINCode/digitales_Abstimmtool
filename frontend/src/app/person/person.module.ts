@@ -6,6 +6,11 @@ import { CreatePersonPageComponent } from './create-person-page/create-person-pa
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {ReactiveFormsModule} from '@angular/forms';
+import {MatTableModule} from "@angular/material/table";
+import {MatIconModule} from '@angular/material/icon';
+import {MatCardModule} from '@angular/material/card';
+import {MatButtonModule} from "@angular/material/button";
+import {MatCheckboxModule} from "@angular/material/checkbox";
 
 @NgModule({
   declarations: [
@@ -20,7 +25,12 @@ import {ReactiveFormsModule} from '@angular/forms';
     PersonRoutingModule,
     MatFormFieldModule,
     MatInputModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatTableModule,
+    MatIconModule,
+    MatCardModule,
+    MatButtonModule,
+    MatCheckboxModule
   ]
 })
 export class PersonModule { }
