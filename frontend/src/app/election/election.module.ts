@@ -8,10 +8,12 @@ import {MatInputModule} from "@angular/material/input";
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
 import {MatSelectModule} from "@angular/material/select";
+import { ElectionOverviewPageComponent } from './election-overview-page/election-overview-page.component';
+import {MatTableModule} from "@angular/material/table";
 
 
 @NgModule({
-    declarations: [CreateElectionRoundPageComponent],
+    declarations: [CreateElectionRoundPageComponent, ElectionOverviewPageComponent],
     imports: [
         CommonModule,
         ElectionRoutingModule,
@@ -20,7 +22,8 @@ import {MatSelectModule} from "@angular/material/select";
         MatInputModule,
         ReactiveFormsModule,
         MatButtonModule,
-        MatSelectModule
+        MatSelectModule,
+        MatTableModule
     ]
 })
 export class ElectionModule {

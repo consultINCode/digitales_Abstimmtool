@@ -14,8 +14,7 @@ export class PersonOverviewPageComponent implements OnInit {
 
     constructor(
         private personService: HttpPersonService
-    ) {
-    }
+    ) {}
 
     ngOnInit(): void {
         this.getPerson();
