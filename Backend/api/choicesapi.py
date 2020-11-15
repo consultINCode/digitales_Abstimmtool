@@ -12,7 +12,7 @@ def readChoices(electionid):
 
 
 def createChoice(data):
-    choice = Choice(description=data['description'], counter=0, picture=data['picture'], election_round_id=data['electionId'])
+    choice = Choice(description=data['description'], counter=0, picture=data["image"], election_round_id=data['electionId'])
     session.add(choice)
     session.commit()
     if choice.id:
