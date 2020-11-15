@@ -1,6 +1,5 @@
 import logging
 
-# from api.choicesapi import createChoice, deleteChoice, readChoices, updateVotes
 import api.choicesapi
 import api.personapi
 import api.voteapi
@@ -88,11 +87,17 @@ def check_out_from_election_round():
 def delete_choice(id):
     return api.choicesapi.delete_choice(id)
 
-#POST: { "description": <string>, "electionId":<number>, "picture":<base64string> };
-#RETURNS: { "id":<number>, "description?":<string>, "message?":<error message> }
+#POST: { "description": <string>, "electionId":<number>, "picture?":<base64string> };
+#RETURNS: { "id":<number>, "updated":<boolean>, "message?":<error message> }
 @app.route('/api/choice/', methods=['POST'])
 def create_choice():
     return api.choicesapi.create_choice(request.json)
+
+#URL: <number>; POST: { "choiceid": <number>, "picture":<base64string> };
+#RETURNS: { "id":<number>, "description?":<string>, "message?":<error message> }
+@app.route('/api/choice/<choiceid>/updatePicture', methods=['POST'])
+def setPicture(choiceid):
+    return api.choicesapi.setPicture(choiceid, request.json)
 
 #URL: <number>
 #RETURNS: { [{ "id":<number>, "picture":<base64String>, "description":<string>, "counter":<number> }] }
@@ -150,6 +155,7 @@ def add_choice_to_election_round():
             return Response(status=200)
         return Response(status= 500)
 
+#GET
 # TODO(Change to get)
 @app.route('/api/electionrounds/getResultOfElectionRound', methods =['POST'])
 def get_result_of_election_round():
@@ -185,59 +191,50 @@ def update_choice_proxy():
             return Response(status=200)
         return Response(status= 500)
 
-#GET:   
-#RETURNS: TODO
+#GET: elec_round_id=<number>
+#RETURNS: { "id":<number>, "name":<string> }
+@app.route('/api/vote/getAllPersonsWhoVoted', methods =['GET'])
 def get_all_persons_who_voted():
-    if request.method == 'GET':
-        elec_round_id = request.args.get('elec_round_id')
-        if elec_round_id is None:
-            resp = Response(status=400)
-            resp.set_data("elec_round_id required.")
-            return resp
-        return api.voteapi.get_all_persons_who_voted(elec_round_id)
-    else:
-        return Response(status=405)
+    elec_round_id = request.args.get('elec_round_id')
+    if elec_round_id is None:
+        resp = Response(status=400)
+        resp.set_data("elec_round_id required.")
+        return resp
+    return api.voteapi.get_all_persons_who_voted(elec_round_id)
 
+#GET: elec_round_id=<number>
+#RETURNS: { "id":<number>, "name":<string> }
 @app.route('/api/vote/getAllPersonsWhoHaveNotVoted', methods =['GET'])
 def get_all_persons_who_have_not_voted():
-    if request.method == 'GET':
-        elec_round_id = request.args.get('elec_round_id')
+    elec_round_id = request.args.get('elec_round_id')
 
-        if elec_round_id is None:
-            resp = Response(status=400)
-            resp.set_data("elec_round_id required.")
-            return resp
+    if elec_round_id is None:
+        resp = Response(status=400)
+        resp.set_data("elec_round_id required.")
+        return resp
 
-        return api.voteapi.get_all_persons_who_have_not_voted(elec_round_id)
-    else:
-        return Response(status=405)
+    return api.voteapi.get_all_persons_who_have_not_voted(elec_round_id)
 
+#GET: { "elec_round_id":<number>, "person_id":<number> }
+#RETURNS: { "Result?":<string>, "Error?":<string> }
 @app.route('/api/vote/setVote', methods =['POST'])
 def set_vote():
-    if request.method == 'POST':
-        data = request.json
-        if data is None:
-            resp = Response(status=400)
-            resp.set_data("elec_round_id and person_id required.")
-            return resp
+    data = request.json
+    if data is None:
+        resp = Response(status=400)
+        resp.set_data("elec_round_id and person_id required.")
+        return resp
 
-        elec_round_id = data['elec_round_id']
-        person_id = data['person_id']
+    elec_round_id = data['elec_round_id']
+    person_id = data['person_id']
 
-        if (elec_round_id is None) or (person_id is None):
-            resp = Response(status=400)
-            resp.set_data("elec_round_id and person_id required.")
-            return resp
+    if (elec_round_id is None) or (person_id is None):
+        resp = Response(status=400)
+        resp.set_data("elec_round_id and person_id required.")
+        return resp
         
-        return api.voteapi.set_vote(elec_round_id, person_id)
-    else:
-        return Response(status=405)
+    return api.voteapi.set_vote(elec_round_id, person_id)
 
-'''
-@app.route('/')
-def answer():
-    return "HelloWOrd"
-'''
 
 if __name__ == "__main__":
     app.run()
