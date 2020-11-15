@@ -6,6 +6,7 @@ from models import Person, ElectionRound, Choice, session
 app = Flask(__name__)
 
 from api.choicesapi import createChoice, deleteChoice, readChoices, updateVotes
+from api.voteapi import getAllPersonsWhoVoted
 
 app = Flask(__name__)
 
@@ -168,6 +169,19 @@ def getResultofElectionRound():
     if request.method == 'POST':
         data = request.json
         return api.electionroundsapi.getResultofElectionRound(data)
+
+@app.route('/api/vote/getAllPersonsWhoVoted', methods =['GET'])
+def getAllPersonsWhoVoted():
+    if request.method == 'GET':
+        elec_round_id = request.args.get('elec_round_id')
+        if elec_round_id is None:
+            resp = Response(status=400)
+            resp.set_data("elec_round_id required.")
+            return resp
+        return api.voteapi.getAllPersonsWhoVoted(elec_round_id)
+    else:
+        return Response(status=405)
+
 
 @app.route('/')
 def answer():
