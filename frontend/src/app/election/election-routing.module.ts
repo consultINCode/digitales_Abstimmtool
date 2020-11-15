@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {CreateElectionRoundPageComponent} from "./create-election-page/create-election-round-page.component";
+import {CreateElectionRoundPageComponent} from "./create-election-round-page/create-election-round-page.component";
 
 const electionRoutes: Routes = [
   {path: 'election/create', component: CreateElectionRoundPageComponent }

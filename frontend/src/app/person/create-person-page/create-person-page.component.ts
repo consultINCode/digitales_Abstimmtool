@@ -12,7 +12,7 @@ export class CreatePersonPageComponent implements OnInit {
 
     private isPresentDefault = true;
 
-    personForm = this.formBuilder.group({
+    public personForm = this.formBuilder.group({
             name: [''],
             is_present:[this.isPresentDefault],
         }
