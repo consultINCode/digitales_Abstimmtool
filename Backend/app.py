@@ -2,9 +2,8 @@ from flask import Flask, Response, request, render_template
 import logging
 import api.personapi
 from models import Person, ElectionRound, Choice, session
-
-app = Flask(__name__)
-
+import api.electionroundsapi
+import api.hasChoice
 from api.choicesapi import createChoice, deleteChoice, readChoices, updateVotes
 
 app = Flask(__name__)
@@ -95,13 +94,6 @@ def checkOutFromElectionRound():
         return Response(status=200)
     return Response(status= 500)
 
-
-
-
-
-#DELETE: { "id": <number> }
-#RETURNS: { "id":<number>, "deleted":<boolean> }
-
 @app.route('/api/choice/<id>', methods=['DELETE'])
 def delete_choice(id):
     return deleteChoice(id)
@@ -167,6 +159,29 @@ def getResultofElectionRound():
     if request.method == 'POST':
         data = request.json
         return api.electionroundsapi.getResultofElectionRound(data)
+
+@app.route('/api/choiceproxy/createChoiceProxy', methods =['POST'])
+def createChoiceProxy():
+    if request.method == 'POST':
+        data = request.json
+        if api.hasChoice.createChoiceProxy(data):
+            return Response(status=200)
+        return Response(status= 500)
+
+@app.route('/api/choiceproxy/<senderid>', methods=['DELETE'])
+def deleteChoiceProxy(senderid):
+    if api.hasChoice.deleteChoiceProxy(senderid):
+        return Response(status=200)
+    return Response(status= 500)
+
+@app.route('/api/choiceproxy/updateChoiceProxy', methods =['POST'])
+def updateChoiceProxy():
+    if request.method == 'POST':
+        data = request.json
+        if api.hasChoice.updateChoiceProxy(data):
+            return Response(status=200)
+        return Response(status= 500)
+
 
 @app.route('/')
 def answer():
