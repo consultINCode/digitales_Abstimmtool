@@ -14,6 +14,12 @@
                         <mat-option *ngFor="let state of status" value="{{state.value}}">{{state.name}}</mat-option>
                     </mat-select>
                 </mat-form-field>
+
+                <mat-form-field class="form__field">
+                    <mat-label>Maximale Anzahl</mat-label>
+                    <input matInput type="number" formControlName="max_choices" placeholder="max_choices" required>
+                </mat-form-field>
+
                 <button class="form__button" mat-flat-button color="accent" (click)="submitForm()">erstellen</button>
             </form>
         </mat-card-content>

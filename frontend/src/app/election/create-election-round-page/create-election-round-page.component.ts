@@ -11,16 +11,16 @@ import {HttpElectionRoundService} from "../service/http-election-round.service";
 export class CreateElectionRoundPageComponent {
 
     public status = [
-        {value:'depending' ,name: 'haltend'},
+        {value:'not_started' ,name: 'nicht gestartet'},
         {value:'running' ,name: 'läuft'},
-        {value:'closed' ,name: 'geschlossen'},
+        {value:'finished' ,name: 'geschlossen'},
     ]
 
     public electionForm = this.formBuilder.group({
             id: [''],
             title: [''],
             running: [''],
-            max_choices_per_person: [''],
+            max_choices: [''],
         }
     );
 
