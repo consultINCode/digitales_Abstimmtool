@@ -1,3 +1,5 @@
+# pylint: disable=maybe-no-member
+
 import json
 import logging
 import sys
@@ -116,7 +118,7 @@ def generate_password(data: dict) -> str:
     person = session.query(Person).filter_by(id=data["userid"]).first()
     password = ''.join(
         [choice('abcdefghijklmnopqrstuvwxyz0123456789-') for i in range(15)])
-    user.password = argon2.hash(password)
+    person.password = argon2.hash(password)
     session.commit()
     return '{ "new_password" : "{}"}'.format(password)
     

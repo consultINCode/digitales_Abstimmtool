@@ -1,3 +1,5 @@
+# pylint: disable=maybe-no-member
+
 import base64
 import json
 

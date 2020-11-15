@@ -1,3 +1,5 @@
+# pylint: disable=maybe-no-member
+
 import json
 import logging
 import sys

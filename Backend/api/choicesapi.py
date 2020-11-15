@@ -1,6 +1,9 @@
-from models import Choice, session
+# pylint: disable=maybe-no-member
+
 import base64
 import json
+
+from models import Choice, session
 
 
 def read_choices(electionid: int) -> str:
