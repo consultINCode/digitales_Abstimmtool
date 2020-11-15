@@ -97,7 +97,6 @@ def checkOutFromElectionRound():
 
 #DELETE: { "id": <number> }
 #RETURNS: { "id":<number>, "deleted":<boolean> }
-
 @app.route('/api/choice/<id>', methods=['DELETE'])
 def delete_choice(id):
     return deleteChoice(id)
@@ -106,7 +105,6 @@ def delete_choice(id):
 #RETURNS: { "id":<number>, "description?":<string>, "message?":<error message> }
 @app.route('/api/choice/', methods=['POST'])
 def create_choice():
-    print(str(request.files))
     return createChoice(request.json)
 
 #URL: <number>
