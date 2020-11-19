@@ -10,17 +10,19 @@ import {HttpElectionRoundService} from "../service/http-election-round.service";
 })
 export class CreateElectionRoundPageComponent {
 
+    public isFormEnable: boolean = true;
+
     public status = [
-        {value:'not_started' ,name: 'nicht gestartet'},
-        {value:'running' ,name: 'läuft'},
-        {value:'finished' ,name: 'geschlossen'},
+        {value: 'not_started', name: 'nicht gestartet'},
+        {value: 'running', name: 'läuft'},
+        {value: 'finished', name: 'geschlossen'},
     ]
 
     public electionForm = this.formBuilder.group({
             id: [''],
             title: [''],
             running: [''],
-            max_choices: [''],
+            max_choices_per_person: [''],
         }
     );
 
@@ -34,8 +36,10 @@ export class CreateElectionRoundPageComponent {
     public submitForm() {
         let electionRound = this.electionForm.value as ElectionRoundInterface;
         this.httpElectionRoundService.setElectionRound(electionRound).subscribe(
-            (success: any) => {
-                alert('success');
+            (electionRound: ElectionRoundInterface) => {
+                this.electionForm.setValue(electionRound)
+                this.electionForm.disable()
+                this.isFormEnable = false;
             },
             (error: any) => {
                 alert('error');

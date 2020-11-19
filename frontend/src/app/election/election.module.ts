@@ -10,10 +10,12 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatSelectModule} from "@angular/material/select";
 import { ElectionOverviewPageComponent } from './election-overview-page/election-overview-page.component';
 import {MatTableModule} from "@angular/material/table";
+import { CreateChoicesComponent } from './create-choices/create-choices.component';
+import { ListChoicesComponent } from './list-choices/list-choices.component';
 
 
 @NgModule({
-    declarations: [CreateElectionRoundPageComponent, ElectionOverviewPageComponent],
+    declarations: [CreateElectionRoundPageComponent, ElectionOverviewPageComponent, CreateChoicesComponent, ListChoicesComponent],
     imports: [
         CommonModule,
         ElectionRoutingModule,
