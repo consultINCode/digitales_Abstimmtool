@@ -20,7 +20,7 @@
                     <input matInput type="number" formControlName="max_choices_per_person" placeholder="max_choices_per_person" required>
                 </mat-form-field>
             </form>
-            <button *ngIf="isFormEnable" mat-flat-button color="accent" (click)="submitForm()">erstellen</button>
+            <button *ngIf="isFormEnable" mat-flat-button color="accent" [disabled]="!electionForm.valid" (click)="submitForm()">erstellen</button>
         </mat-card-content>
     </mat-card>
     <app-create-choices [electionRound]="electionForm.value"></app-create-choices>

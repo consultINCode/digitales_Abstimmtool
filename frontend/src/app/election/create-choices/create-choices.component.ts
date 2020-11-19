@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {FormBuilder} from "@angular/forms";
+import {FormBuilder, Validators} from "@angular/forms";
 import {HttpElectionRoundService} from "../service/http-election-round.service";
 import {ElectionRoundInterface} from "../Interface/ElectionRound.Interface";
 import {HttpChoiceService} from "../service/http.choice.service";
@@ -10,10 +10,10 @@ import {ChoiceInterface} from "../Interface/Choice.Interface";
     templateUrl: './create-choices.component.html',
     styleUrls: ['./create-choices.component.scss']
 })
-export class CreateChoicesComponent implements OnChanges{
+export class CreateChoicesComponent implements OnChanges, OnInit{
     @Input() electionRound: ElectionRoundInterface;
     public choicesForm = this.formBuilder.group({
-        description: [''],
+        description: ['', [ Validators.required, Validators.minLength(3)]],
         picture: [''],
         election_round_id: [''],
         }
@@ -23,6 +23,9 @@ export class CreateChoicesComponent implements OnChanges{
         private formBuilder: FormBuilder,
         private httpChoiceService: HttpChoiceService
     ) {
+    }
+    ngOnInit(): void {
+        this.choicesForm.disable()
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -43,5 +46,7 @@ export class CreateChoicesComponent implements OnChanges{
         )
 
     }
+
+
 
 }

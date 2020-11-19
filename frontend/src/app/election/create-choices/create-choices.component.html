@@ -5,7 +5,7 @@
             <input matInput type="text" formControlName="description" placeholder="Beschreibung" required>
         </mat-form-field>
     </form>
-    <button mat-flat-button color="accent" (click)="submitForm()">erstellen</button>
+    <button mat-flat-button color="accent" (click)="submitForm()" [disabled]="!choicesForm.valid">erstellen</button>
 </mat-card>
 <mat-card>
 <pre>
