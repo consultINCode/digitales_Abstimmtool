@@ -1,6 +1,5 @@
 # pylint: disable=maybe-no-member
 
-import base64
 import json
 
 from models import Choice, session
@@ -21,10 +20,17 @@ def read_choices(electionid: int) -> str:
     return json.dumps(liste)
 
 def create_choice(data: dict) -> str:
+    if not 'description' in data:
+        return json.dumps({'message':'description missing'})
+
+    picture = data['picture'] if ( 
+        'picture' in data and data['picture'].endswith('==')
+        ) else ''
+    
     choice = Choice(
         description=data['description'], 
         counter=0, 
-        picture=data["image"], 
+        picture=picture,
         election_round_id=data['electionId']
     )
     session.add(choice)
@@ -40,6 +46,19 @@ def delete_choice(choiceid: int) -> str:
         session.commit()
         return json.dumps({'id':choiceid, 'deleted': True})
     return json.dumps({'id':choiceid, 'deleted': False})
+
+def setPicture(choiceid: int, data: dict) -> str:
+    if not 'picture' in data:
+        return json.dumps({'updated': False, 'message':'picture missing'})
+    if not data['picture'].endswith('=='):
+        return json.dumps({'updated': False, 'message':'not a base string'})
+    
+    choice = session.query(Choice).get(choiceid)
+    if choice:
+        choice.picture=data['picture']
+        session.commit()
+        return json.dumps({'id':choiceid, 'updated': True})
+    return json.dumps({'id':choiceid, 'updated': False})
 
 def update_votes(choiceId: int, votes: int) -> str:
     if not votes['votes'].isdigit():
