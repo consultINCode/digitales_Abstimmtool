@@ -1,4 +1,4 @@
-.wrapper {
+.card-wrapper {
   width: 100%;
   display: flex;
   justify-content: center;
@@ -6,9 +6,12 @@
   padding-top: 20px;
   flex-direction: column;
 
-  .form {
-    max-width: 300px;
+  &__card {
+    margin: 10px;
+    max-width: 400px;
+  }
 
+  .form {
     &__input {
       width: 100%;
     }

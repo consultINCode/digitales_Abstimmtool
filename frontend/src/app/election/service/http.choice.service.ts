@@ -1,8 +1,8 @@
 import {Inject, Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {ElectionRoundInterface} from "../Interface/ElectionRound.Interface";
-import {ChoiceInterface} from "../Interface/Choice.Interface";
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {ElectionRoundInterface} from '../Interface/ElectionRound.Interface';
+import {ChoiceInterface} from '../Interface/Choice.Interface';
 
 @Injectable({
     providedIn: 'root'

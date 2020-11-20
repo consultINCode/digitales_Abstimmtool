@@ -1,8 +1,6 @@
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {ChoiceInterface} from "../Interface/Choice.Interface";
-import {MatTableDataSource} from "@angular/material/table";
-import {HttpChoiceService} from "../service/http.choice.service";
-import {ElectionRoundInterface} from "../Interface/ElectionRound.Interface";
+import {Component, Input} from '@angular/core';
+import {ChoiceInterface} from '../Interface/Choice.Interface';
+import {ElectionRoundInterface} from '../Interface/ElectionRound.Interface';
 
 @Component({
     selector: 'app-list-choices',

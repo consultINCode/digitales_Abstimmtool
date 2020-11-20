@@ -1,5 +1,5 @@
-<div class="wrapper">
-    <mat-card>
+<div class="card-wrapper">
+    <mat-card class="card-wrapper__card">
         <mat-card-header>Wahlrunde erstellen</mat-card-header>
         <mat-card-content>
             <form class="form" [formGroup]="electionForm">
@@ -26,11 +26,11 @@
             </button>
         </mat-card-content>
     </mat-card>
-    <app-list-choices [choices]="createdChoices" [electionRound]="electionForm.value"></app-list-choices>
+    <app-list-choices class="card-wrapper__card" [choices]="createdChoices" [electionRound]="electionForm.value"></app-list-choices>
     <app-create-choices
+            class="card-wrapper__card"
             [electionRound]="electionForm.value"
             (emitCreatedChoice)="updateCreatedChoices($event)">
-
     </app-create-choices>
 </div>
 

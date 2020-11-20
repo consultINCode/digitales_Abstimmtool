@@ -9,7 +9,7 @@ import { AppComponent } from './app.component';
 import {PersonModule} from './person/person.module';
 import {LandingPageModule} from './landing-page/landing-page.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {ElectionModule} from "./election/election.module";
+import {ElectionModule} from './election/election.module';
 
 
 @NgModule({

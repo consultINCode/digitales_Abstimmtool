@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
-import {FormBuilder} from "@angular/forms";
-import {ElectionRoundInterface} from "../Interface/ElectionRound.Interface";
-import {HttpElectionRoundService} from "../service/http-election-round.service";
-import {ChoiceInterface} from "../Interface/Choice.Interface";
+import {FormBuilder} from '@angular/forms';
+import {ElectionRoundInterface} from '../Interface/ElectionRound.Interface';
+import {HttpElectionRoundService} from '../service/http-election-round.service';
+import {ChoiceInterface} from '../Interface/Choice.Interface';
 
 @Component({
     selector: 'app-create-election-page',
@@ -11,14 +11,14 @@ import {ChoiceInterface} from "../Interface/Choice.Interface";
 })
 export class CreateElectionRoundPageComponent {
 
-    public isFormEnable: boolean = true;
+    public isFormEnable = true;
     public createdChoices: ChoiceInterface[] = [];
 
     public status = [
         {value: 'not_started', name: 'nicht gestartet'},
         {value: 'running', name: 'läuft'},
         {value: 'finished', name: 'geschlossen'},
-    ]
+    ];
 
     public electionForm = this.formBuilder.group({
             id: [''],
@@ -36,11 +36,11 @@ export class CreateElectionRoundPageComponent {
 
 
     public submitForm() {
-        let electionRound = this.electionForm.value as ElectionRoundInterface;
+        const electionRound = this.electionForm.value as ElectionRoundInterface;
         this.httpElectionRoundService.setElectionRound(electionRound).subscribe(
             (electionRound: ElectionRoundInterface) => {
-                this.electionForm.setValue(electionRound)
-                this.electionForm.disable()
+                this.electionForm.setValue(electionRound);
+                this.electionForm.disable();
                 this.isFormEnable = false;
             },
             (error: any) => {
@@ -51,6 +51,6 @@ export class CreateElectionRoundPageComponent {
 
     public updateCreatedChoices(event: Event){
         // @ts-ignore
-        this.createdChoices.push(event)
+        this.createdChoices.push(event);
     }
 }

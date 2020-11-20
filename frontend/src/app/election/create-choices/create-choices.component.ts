@@ -1,10 +1,10 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {FormBuilder, Validators} from "@angular/forms";
-import {HttpElectionRoundService} from "../service/http-election-round.service";
-import {ElectionRoundInterface} from "../Interface/ElectionRound.Interface";
-import {HttpChoiceService} from "../service/http.choice.service";
-import {ChoiceInterface} from "../Interface/Choice.Interface";
-import {Observable} from "rxjs";
+import {FormBuilder, Validators} from '@angular/forms';
+import {HttpElectionRoundService} from '../service/http-election-round.service';
+import {ElectionRoundInterface} from '../Interface/ElectionRound.Interface';
+import {HttpChoiceService} from '../service/http.choice.service';
+import {ChoiceInterface} from '../Interface/Choice.Interface';
+import {Observable} from 'rxjs';
 
 @Component({
     selector: 'app-create-choices',
@@ -19,7 +19,7 @@ export class CreateChoicesComponent implements OnChanges, OnInit {
     public choicesForm = this.formBuilder.group({
             description: ['', [Validators.required, Validators.minLength(3)]],
             picture: [''],
-            election_round_id: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+            election_round_id: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
         }
     );
 
@@ -30,39 +30,38 @@ export class CreateChoicesComponent implements OnChanges, OnInit {
     }
 
     ngOnInit(): void {
-        this.choicesForm.disable()
+        this.choicesForm.disable();
     }
 
     ngOnChanges(changes: SimpleChanges): void {
         if (changes.electionRound.currentValue.id) {
-            this.choicesForm.controls['election_round_id'].setValue(changes.electionRound.currentValue.id)
-            this.choicesForm.enable()
+            this.choicesForm.controls.election_round_id.setValue(changes.electionRound.currentValue.id);
+            this.choicesForm.enable();
         }
     }
 
     public submitForm() {
-        let choice = this.choicesForm.value as ChoiceInterface;
+        const choice = this.choicesForm.value as ChoiceInterface;
         this.httpChoiceService.setChoice(choice).subscribe(
             (choice: ChoiceInterface) => {
-                alert('success')
+                alert('success');
                 this.emitCreatedChoice.emit(choice);
-                this.choicesForm.reset()
-                this.choicesForm.controls['election_round_id'].setValue(this.electionRound.id)
+                this.choicesForm.reset();
+                this.choicesForm.controls.election_round_id.setValue(this.electionRound.id);
             },
             (error: any) => {
-                alert('error')
+                alert('error');
             }
-        )
+        );
     }
     public selectFile(event) {
 
         this.file = event.target.files[0];
-        debugger;
-        let myReader = new FileReader();
+        const myReader = new FileReader();
 
         myReader.onloadend = (e) => {
-            this.choicesForm.controls['picture'].setValue(myReader.result);
-        }
+            this.choicesForm.controls.picture.setValue(myReader.result);
+        };
         myReader.readAsDataURL(this.file);
     }
 }

@@ -1,7 +1,7 @@
 import {Inject, Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {ElectionRoundInterface} from "../Interface/ElectionRound.Interface";
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {ElectionRoundInterface} from '../Interface/ElectionRound.Interface';
 
 @Injectable({
   providedIn: 'root'
