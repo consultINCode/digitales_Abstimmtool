@@ -1,7 +1,7 @@
 import {Inject, Injectable} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {ElectionRoundInterface} from "../Interface/ElectionRound.Interface";
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {ElectionRoundInterface} from '../Interface/ElectionRound.Interface';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +17,8 @@ export class HttpElectionRoundService {
     return this.http.get<ElectionRoundInterface[]>(this.demUrl + 'electionrounds/getAllElectionRounds');
   }
 
-  public setElectionRound(electionRound: ElectionRoundInterface): Observable<any> {
-    return this.http.post<any>(this.demUrl + 'electionrounds/createElectionRound', electionRound);
+  public setElectionRound(electionRound: ElectionRoundInterface): Observable<ElectionRoundInterface> {
+    return this.http.post<ElectionRoundInterface>(this.demUrl + 'electionrounds/createElectionRound', electionRound);
   }
 
 }

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl} from '@angular/forms';
-import {HttpPersonService} from "../service/http-person.service";
-import {PersonInterface} from "../Interface/Person.Interface";
+import {HttpPersonService} from '../service/http-person.service';
+import {PersonInterface} from '../Interface/Person.Interface';
 
 @Component({
     selector: 'app-create-person-page',
@@ -14,7 +14,7 @@ export class CreatePersonPageComponent implements OnInit {
 
     public personForm = this.formBuilder.group({
             name: [''],
-            is_present:[this.isPresentDefault],
+            is_present: [this.isPresentDefault],
         }
     );
 
@@ -28,7 +28,7 @@ export class CreatePersonPageComponent implements OnInit {
     }
 
     public submitForm() {
-        let person = this.personForm.value as PersonInterface;
+        const person = this.personForm.value as PersonInterface;
         this.personService.setPerson(person).subscribe(
             (success: any) => {
                 alert('success');
