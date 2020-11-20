@@ -6,6 +6,7 @@ import sys
 import os
 from passlib.hash import argon2
 from random import choice
+import api.response_helper as Response
 
 PACKAGE_PARENT = '..'
 SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
@@ -25,50 +26,63 @@ logging.error('And non-ASCII stuff, too, like Øresund and Malmö')
 '''
 
 # Helpers
-def model_as_dict(self):
-       return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+def model_as_dict(person):
+       return {
+                "id" : person.id,
+                "name" : person.name,
+                "is_present" : person.is_present,
+                "role" : person.role
+            }
 
 #  get_all_persons()
 # Gibt alle Benutzer zurück die in der Anwendung hinterlegt sind.
 def get_all_persons():
-    persons = session.query(Person).all()
-    
-    print(persons)
+    try:
+        persons = session.query(Person).all()
+        session.commit()
+    except:
+        Response.database_error()
     response = [] 
     for person in persons:
-        response.append(model_as_dict(person))
-
+        response.append(
+            model_as_dict(person)
+        )
     json_response = json.dumps(response)
-    print(json_response)
-    session.commit()
-    return json_response
+    return Response.ok(json_response)
     
 
 
 # get_all_persons_checked_in()
 # Gibt alle als anwesend makierten Benutzer zurück.
 def get_all_persons_checked_in():
-    persons = session.query(Person).filter(Person.is_present == True).all()
-    session.commit()
-    print(persons)
+    try:
+        persons = session.query(Person).filter(Person.is_present == True).all()
+        session.commit()
+    except:
+        return Response.database_error()
+    
     response = [] 
     for person in persons:
-        response.append(model_as_dict(person))
-
+        response.append(
+            model_as_dict(person)
+        )
     json_response = json.dumps(response)
     print(json_response)
-    return json_response
+    return Response.ok(json_response)
 
 ### get_all_persons_checked_out()
 # Gibt alle als abwesend makierten Benutzer zurück.
 def get_all_persons_checked_out():
-    persons = session.query(Person).filter(Person.is_present==False).all()
-    session.commit()
+    try:
+        persons = session.query(Person).filter(Person.is_present==False).all()
+        session.commit()
+    except:
+        return Response.database_error()
     response = []
     for person in persons:
         response.append(model_as_dict(person))
-    
-    return json.dumps(response)
+    json_respose = json.dumps(response)
+    return Response.ok(json.dumps(response))
 
 # ### approve_minimal_voters()
 # Überprüft ob Mindesanzahl an Wähler für eine MV vorhanden sind
@@ -77,13 +91,15 @@ def approve_minimal_voters():
     num_checkedin_persons = len(get_all_persons_checked_in())
     num_all_persons = len(get_all_persons())
     if num_all_persons / num_checkedin_persons >= 0.5:
-        return True
+        return Response.ok({"approved":True, "message":"Minimum number reached"})
     else:
-        return False
+        return Response.ok({"approved":False, "message":"Minimum number not reached"})
 
 # ### create_person(Person)
 # Bekommt als Parameter mehrer Werte um eine Person anzulegen.
 def create_person(data: dict):
+    if 'name' not in data or not data['name']:
+        return Response.wrong_format({"message": "Name missing!"})
     p1 = Person()
     p1.name = data['name']
     # TODO: Encpyt Passwords
@@ -94,27 +110,41 @@ def create_person(data: dict):
     try:
          session.commit()
     except:
-        return False
-    return True
+        Response.database_error()
+    response = model_as_dict(p1)
+    return Response.ok(response)
     
 
 # ### delete_person(Person)
 # Entfernt einen Benutzer aus der Anwendung
-def delete_person(data: dict) -> bool:
-    person = session.query(Person).filter_by(id=data["userid"]).first()
+def delete_person(userid: int):
+    print(type(userid))
+    if not userid:
+        return Response.wrong_format({'updated': False, 'message':'userid missing'})
+    
+    try:
+        person = session.query(Person).filter_by(id=userid).first()
+    except:
+        return Response.database_error()
+    
+    if not person:
+        return Response.ressource_not_found({"message": "userid not found!"})
     session.delete(person)
     try:
-         session.commit()
+        session.commit()
     except:
-        return False
-    return True
+        Response.database_error()
+    return Response.ok({"userid":userid, "message":"deleted"})
     
 # ### generate_password() - same as resetPassword()
 # Generiert ein Passwort für einen Benutzer
 # Idee: 
 #   Link mit einem geheimniss an user, user clickt, 
 #   wenn pw = "", neues generieren und zurückgeben
-def generate_password(data: dict) -> str:
+def generate_password(data: dict):
+    if not 'userid' in data:
+        return Response.wrong_format({'updated': False, 'message':'userid missing'})
+    
     person = session.query(Person).filter_by(id=data["userid"]).first()
     password = ''.join(
         [choice('abcdefghijklmnopqrstuvwxyz0123456789-') for i in range(15)])
@@ -125,24 +155,30 @@ def generate_password(data: dict) -> str:
 
 # ### check_in_for_election_round(ElectionRound)
 # Anwesenheit für einen Wahlgang bestätigen
-def check_in_for_election_round(data: dict) -> bool:
-    person = session.query(Person).filter(Person.id == data['userid']).first()
+def check_in(userid: int):
+    if not userid:
+        return Response.wrong_format({'updated': False, 'message':'userid missing'})
+    
+    person = session.query(Person).filter(Person.id == userid).first()
     person.is_present = True
     session.add(person)
     try:
-         session.commit()
+        session.commit()
     except:
-        return False
-    return True
+        Response.database_error()
+    return Response.ok({"userid":userid, "message":"checked in"})
     
 # ### check_out_from_election_round(ElectionRound)
 # Sich von einem Wahlgang abmelden
-def check_out_from_election_round(data: dict) -> bool:
-    person = session.query(Person).filter(Person.id == data['userid']).first()
+def check_out(userid: int):
+    if not userid:
+        return Response.wrong_format({'updated': False, 'message':'userid missing'})
+    
+    person = session.query(Person).filter(Person.id == userid).first()
     person.is_present = False
     try:
          session.commit()
     except:
-        return False
-    return True
+        Response.database_error()
+    return Response.ok({"userid":userid, "message":"checked out"})
     

@@ -11,3 +11,6 @@ cd Backend && python -m flask run
 
 ### hot module reload
 `FLASK_APP=app.py FLASK_ENV=development flask run`
+
+### total length of lines in code
+`git ls-files | xargs wc -l`
