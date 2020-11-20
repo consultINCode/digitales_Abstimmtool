@@ -12,6 +12,7 @@ import { ElectionOverviewPageComponent } from './election-overview-page/election
 import {MatTableModule} from "@angular/material/table";
 import { CreateChoicesComponent } from './create-choices/create-choices.component';
 import { ListChoicesComponent } from './list-choices/list-choices.component';
+import {MatIconModule} from "@angular/material/icon";
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import { ListChoicesComponent } from './list-choices/list-choices.component';
         ReactiveFormsModule,
         MatButtonModule,
         MatSelectModule,
-        MatTableModule
+        MatTableModule,
+        MatIconModule
     ]
 })
 export class ElectionModule {

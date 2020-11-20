@@ -1,1 +1,12 @@
-<p>list-choices works!</p>
+<mat-card>
+    <div *ngFor="let choice of choices">
+        <mat-card>
+            <mat-card-header>
+                {{choice.description}}
+            </mat-card-header>
+            <mat-card-content>
+                <img src="{{choice.picture}}" alt="">
+            </mat-card-content>
+        </mat-card>
+    </div>
+</mat-card>

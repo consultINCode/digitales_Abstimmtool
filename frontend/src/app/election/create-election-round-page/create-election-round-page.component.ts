@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {FormBuilder} from "@angular/forms";
 import {ElectionRoundInterface} from "../Interface/ElectionRound.Interface";
 import {HttpElectionRoundService} from "../service/http-election-round.service";
+import {ChoiceInterface} from "../Interface/Choice.Interface";
 
 @Component({
     selector: 'app-create-election-page',
@@ -11,6 +12,7 @@ import {HttpElectionRoundService} from "../service/http-election-round.service";
 export class CreateElectionRoundPageComponent {
 
     public isFormEnable: boolean = true;
+    public createdChoices: ChoiceInterface[] = [];
 
     public status = [
         {value: 'not_started', name: 'nicht gestartet'},
@@ -45,5 +47,10 @@ export class CreateElectionRoundPageComponent {
                 alert('error');
             }
         );
+    }
+
+    public updateCreatedChoices(event: Event){
+        // @ts-ignore
+        this.createdChoices.push(event)
     }
 }

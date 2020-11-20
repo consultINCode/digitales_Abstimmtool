@@ -1,6 +1,7 @@
 export interface ChoiceInterface {
     id?: number;
     description: string;
-    picture: Blob;
+    picture?: string;
+    counter?: number;
     election_round_id: number;
 }

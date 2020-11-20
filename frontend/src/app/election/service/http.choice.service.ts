@@ -15,12 +15,12 @@ export class HttpChoiceService {
     ) {
     }
 
-    public getChoicesForElectionRound(electionRoundId: number): Observable<ElectionRoundInterface[]> {
-        return this.http.get<ElectionRoundInterface[]>(this.demUrl + 'electionrounds/getAllElectionRounds');
+    public getChoicesForElectionRound(electionRoundId: number): Observable<ChoiceInterface[]> {
+        return this.http.get<ChoiceInterface[]>(this.demUrl + 'choice/election/' + String(electionRoundId));
     }
 
-    public setChoice(choice: ChoiceInterface): Observable<any> {
-        return this.http.post<any>(this.demUrl + 'choice/', choice);
+    public setChoice(choice: ChoiceInterface): Observable<ChoiceInterface> {
+        return this.http.post<ChoiceInterface>(this.demUrl + 'choice/', choice);
     }
 
 }

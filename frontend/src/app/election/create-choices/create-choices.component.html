@@ -4,11 +4,17 @@
             <mat-label>Beschreibung</mat-label>
             <input matInput type="text" formControlName="description" placeholder="Beschreibung" required>
         </mat-form-field>
+        <mat-form-field class="columns">
+            <mat-label *ngIf="file; else newFile">{{file.name}}</mat-label>
+            <ng-template #newFile>
+                <mat-label>Choose file</mat-label>
+            </ng-template>
+            <input matInput disabled>
+            <button mat-icon-button matSuffix (click)="fileInput.click()">
+                <mat-icon>attach_file</mat-icon>
+            </button>
+            <input hidden (change)="selectFile($event)" #fileInput type="file" id="file">
+        </mat-form-field>
+        <button mat-flat-button color="accent" (click)="submitForm()" [disabled]="!choicesForm.valid">erstellen</button>
     </form>
-    <button mat-flat-button color="accent" (click)="submitForm()" [disabled]="!choicesForm.valid">erstellen</button>
-</mat-card>
-<mat-card>
-<pre>
-    {{this.choicesForm.value |  json}}
-</pre>
 </mat-card>
