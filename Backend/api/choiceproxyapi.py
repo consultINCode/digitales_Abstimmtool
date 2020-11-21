@@ -66,8 +66,7 @@ def delete_choice_proxy(id: int) -> bool:
             Person.id == choice.sender_id).first()
         receiver.received_proxy_vote.remove(sender)
         session.commit()
-    except Exception as e:
-        print(e)
+    except:
         return Response.database_error()
     return Response.ok({"success": True, 'message':'senderid {} deleted vote from receiverid {}'.format(sender.id,receiver.id)})
 

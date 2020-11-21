@@ -49,7 +49,7 @@ def get_all_persons_checked_out():
 def create_person():
     return api.personapi.create_person(request.json)
      
-#DELETE { "userid":<number> } 
+#DELETE userid:<number>
 #RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/persons/<userid>', methods =['DELETE'])
 def delete_person(userid):
@@ -61,13 +61,13 @@ def delete_person(userid):
 def approve_minimal_voters():
     return api.personapi.approve_minimal_voters()
 
-#POST { "userid":<number> } TODO GET /api/persons/<userid>/checkIn
+#GET userid:<number>
 #RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/persons/checkIn/<userid>', methods =['GET'])
 def checkInForElectionRound(userid):
     return api.personapi.check_in(userid)
 
-#POST { "userid":<number> } TODO GET /api/persons/<userid>/checkIn
+#GET userid:<number>
 #RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/persons/checkOut/<userid>', methods =['GET'])
 def check_out_from_election_round(userid):
@@ -97,7 +97,7 @@ def updatePicture(choiceid):
 def update_votes(choiceid):
     return api.choicesapi.update_votes(choiceid, request.json)
 
-#GET: <number>
+#GET: electionid: <number>
 #RETURNS: { [{ "id":<number>, "picture":<base64String>, "description":<string>, "counter":<number> }] }
 @app.route('/api/election/<electionid>', methods=['GET'])
 def read_choices(electionid):
@@ -121,7 +121,7 @@ def get_election_rounds():
 def get_all_open_elections():
     return api.electionroundsapi.get_all_open_elections()
 
-#GET: { "electionroundid":<number> } 
+#GET: electionroundid:<number>
 #RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/election/close/<electionroundid>', methods =['GET'])
 def close_open_election_round(electionroundid):
@@ -133,8 +133,7 @@ def close_open_election_round(electionroundid):
 def add_choice_to_election_round():
     return api.electionroundsapi.add_choice_to_election_round(request.json)
 
-#GET
-# TODO(Change to get)
+#GET electionroundid=<number>
 @app.route('/api/election/getResult/<electionroundid>', methods =['GET'])
 def get_result_of_election_round(electionroundid):
     return api.electionroundsapi.get_result_of_election_round(electionroundid)
@@ -174,22 +173,8 @@ def get_all_persons_who_have_not_voted(electionroundid):
 #POST: { "elec_round_id":<number>, "person_id":<number> }
 #RETURNS: { "Result?":<string>, "Error?":<string> }
 @app.route('/api/vote/setVote', methods =['POST'])
-def set_vote():
-    data = request.json
-    if data is None:
-        resp = Response(status=400)
-        resp.set_data("elec_round_id and person_id required.")
-        return resp
-
-    elec_round_id = data['elec_round_id']
-    person_id = data['person_id']
-
-    if (elec_round_id is None) or (person_id is None):
-        resp = Response(status=400)
-        resp.set_data("elec_round_id and person_id required.")
-        return resp
-        
-    return api.voteapi.set_vote(elec_round_id, person_id)
+def set_vote():       
+    return api.voteapi.set_vote(request.json)
 
 '''@app.route("/")
 def hello():
