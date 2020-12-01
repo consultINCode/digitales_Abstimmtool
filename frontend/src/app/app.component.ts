@@ -13,5 +13,5 @@ export class AppComponent {
     {name: 'Mitglied erstellen', route: '/person/create'},
     {name: 'Wahl erstellen', route: '/election/create'},
     {name: 'Wahl', route: '/election'},
-  ]
+  ];
 }

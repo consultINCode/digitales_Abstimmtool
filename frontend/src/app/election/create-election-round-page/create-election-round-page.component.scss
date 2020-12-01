@@ -1,12 +1,17 @@
-.wrapper {
+.card-wrapper {
   width: 100%;
   display: flex;
   justify-content: center;
+  align-items: center;
   padding-top: 20px;
+  flex-direction: column;
+
+  &__card {
+    margin: 10px;
+    max-width: 400px;
+  }
 
   .form {
-    max-width: 300px;
-
     &__input {
       width: 100%;
     }

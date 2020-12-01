@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {ElectionRoundInterface} from "../Interface/ElectionRound.Interface";
-import {HttpElectionRoundService} from "../service/http-election-round.service";
+import {ElectionRoundInterface} from '../Interface/ElectionRound.Interface';
+import {HttpElectionRoundService} from '../service/http-election-round.service';
 
 @Component({
     selector: 'app-election-overview-page',
@@ -27,7 +27,7 @@ export class ElectionOverviewPageComponent implements OnInit {
             (electionRound: ElectionRoundInterface[]) => {
                 this.electionRounds = electionRound;
             }
-        )
+        );
     }
 
 }
