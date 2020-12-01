@@ -42,7 +42,7 @@ export class CreateChoicesComponent implements OnChanges, OnInit {
 
     public submitForm() {
         const choice = this.choicesForm.value as ChoiceInterface;
-        this.httpChoiceService.setChoice(choice).subscribe(
+        this.httpChoiceService.createChoice(choice).subscribe(
             (choice: ChoiceInterface) => {
                 alert('success');
                 this.emitCreatedChoice.emit(choice);

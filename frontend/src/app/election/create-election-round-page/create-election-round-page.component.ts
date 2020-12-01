@@ -37,7 +37,7 @@ export class CreateElectionRoundPageComponent {
 
     public submitForm() {
         const electionRound = this.electionForm.value as ElectionRoundInterface;
-        this.httpElectionRoundService.setElectionRound(electionRound).subscribe(
+        this.httpElectionRoundService.createElectionRound(electionRound).subscribe(
             (electionRound: ElectionRoundInterface) => {
                 this.electionForm.setValue(electionRound);
                 this.electionForm.disable();
