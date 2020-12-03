@@ -14,7 +14,7 @@ export class HttpElectionRoundService {
   ) {}
 
   public getElectionRounds(): Observable<ElectionRoundInterface[]> {
-    return this.http.get<ElectionRoundInterface[]>(this.demUrl + 'electionrounds/getAllElectionRounds');
+    return this.http.get<ElectionRoundInterface[]>(this.demUrl + 'election/getAll');
   }
 
   public createElectionRound(electionRound: ElectionRoundInterface): Observable<ElectionRoundInterface> {

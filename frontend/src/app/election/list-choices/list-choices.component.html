@@ -4,14 +4,14 @@
     </mat-card-header>
     <mat-card-content>
         <div *ngFor="let choice of choices">
-            <mat-card class="choice-card">
-                <mat-card-header>
-                    {{choice.description}}
-                </mat-card-header>
-                <mat-card-content class="choice-card__content">
-                    <img src="{{choice.picture}}" alt="">
-                </mat-card-content>
-            </mat-card>
+            <div class="choice-card">
+               <div class="choice-card__image">
+                   <img src="{{choice.picture}}" alt="">
+               </div>
+              <div class="choice-card__description">
+                  {{choice.description}}
+              </div>
+            </div>
         </div>
     </mat-card-content>
 </mat-card>
