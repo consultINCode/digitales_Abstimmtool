@@ -29,7 +29,7 @@ export class PersonOverviewPageComponent implements OnInit {
         );
     }
 
-    private changePresence(person: PersonInterface) {
+    private changePresence(person: PersonInterface): void {
         this.personService.changePresence(person).subscribe(
             (res: any) => {
                 person.is_present = !person.is_present;

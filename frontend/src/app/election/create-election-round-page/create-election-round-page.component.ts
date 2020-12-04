@@ -35,10 +35,10 @@ export class CreateElectionRoundPageComponent {
     }
 
 
-    public submitForm() {
+    public submitForm(): void {
         const electionRound = this.electionForm.value as ElectionRoundInterface;
         this.httpElectionRoundService.createElectionRound(electionRound).subscribe(
-            (electionRound: ElectionRoundInterface) => {
+            (electionRoundData: ElectionRoundInterface) => {
                 this.electionForm.setValue(electionRound);
                 this.electionForm.disable();
                 this.isFormEnable = false;
@@ -49,7 +49,7 @@ export class CreateElectionRoundPageComponent {
         );
     }
 
-    public updateCreatedChoices(event: Event){
+    public updateCreatedChoices(event: Event): void{
         // @ts-ignore
         this.createdChoices.push(event);
     }

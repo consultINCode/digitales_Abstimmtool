@@ -10,7 +10,7 @@ import {PersonModule} from './person/person.module';
 import {LandingPageModule} from './landing-page/landing-page.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ElectionModule} from './election/election.module';
-import {TopNavBarComponent} from "./core/components/top-nav-bar/top-nav-bar.component";
+import {TopNavBarComponent} from './core/components/top-nav-bar/top-nav-bar.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
 
 

@@ -38,7 +38,7 @@ export class CreateChoicesComponent implements OnChanges, OnInit {
         }
     }
 
-    public submitForm() {
+    public submitForm(): void {
         const choice = this.choicesForm.value as ChoiceInterface;
         this.httpChoiceService.createChoice(choice).subscribe(
             (result: ChoiceInterface) => {
@@ -52,7 +52,7 @@ export class CreateChoicesComponent implements OnChanges, OnInit {
             }
         );
     }
-    public selectFile(event) {
+    public selectFile(event): void {
 
         this.file = event.target.files[0];
         const myReader = new FileReader();
