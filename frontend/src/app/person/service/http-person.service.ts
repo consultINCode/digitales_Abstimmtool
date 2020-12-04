@@ -22,4 +22,12 @@ export class HttpPersonService {
         return this.http.post<any>(this.demUrl + 'persons/create', person);
     }
 
+    public changePresence(person: PersonInterface): Observable<any> {
+        if(person.is_present){
+            return this.http.get(this.demUrl + 'persons/checkOut/' + person.id);
+        }else {
+            return this.http.get(this.demUrl + 'persons/checkIn/' + person.id);
+        }
+    }
+
 }

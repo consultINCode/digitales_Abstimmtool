@@ -1,10 +1,8 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
-import {HttpElectionRoundService} from '../service/http-election-round.service';
 import {ElectionRoundInterface} from '../Interface/ElectionRound.Interface';
 import {HttpChoiceService} from '../service/http.choice.service';
 import {ChoiceInterface} from '../Interface/Choice.Interface';
-import {Observable} from 'rxjs';
 
 @Component({
     selector: 'app-create-choices',

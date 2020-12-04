@@ -16,7 +16,12 @@ import {MatIconModule} from '@angular/material/icon';
 
 
 @NgModule({
-    declarations: [CreateElectionRoundPageComponent, ElectionOverviewPageComponent, CreateChoicesComponent, ListChoicesComponent],
+    declarations: [
+        CreateElectionRoundPageComponent,
+        ElectionOverviewPageComponent,
+        CreateChoicesComponent,
+        ListChoicesComponent
+    ],
     imports: [
         CommonModule,
         ElectionRoutingModule,
