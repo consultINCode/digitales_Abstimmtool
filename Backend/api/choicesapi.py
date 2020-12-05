@@ -41,7 +41,8 @@ def create_choice(data: dict) -> str:
         description=data['description'], 
         counter=0, 
         picture=picture,
-        election_round_id=data['electionid']
+        election_round_id=data['election_round_id']
+
     )
     session.add(choice)
     try:
