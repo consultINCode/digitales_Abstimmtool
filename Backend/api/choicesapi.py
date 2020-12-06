@@ -33,6 +33,9 @@ def create_choice(data: dict) -> str:
     if 'picture' in data:
         if data['picture'].endswith('=='):
             picture = data['picture']
+
+        elif not data['picture']:
+            picture = ''
         else:
             return Response.wrong_format({"message" : "picture is not Base64"})
     else :

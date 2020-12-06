@@ -43,9 +43,9 @@ export class CreateChoicesComponent implements OnChanges, OnInit {
         this.httpChoiceService.createChoice(choice).subscribe(
             (result: ChoiceInterface) => {
                 alert('success');
+                this.file = null;
                 this.emitCreatedChoice.emit(choice);
                 this.choicesForm.reset();
-                this.file = null;
                 this.choicesForm.controls.election_round_id.setValue(this.electionRound.id);
             },
             (error: any) => {
