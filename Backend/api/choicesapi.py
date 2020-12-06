@@ -27,6 +27,7 @@ def create_choice(data: dict) -> str:
     if not 'description' in data:
         return Response.wrong_format(json.dumps({'message':'description missing'}))
     if not 'election_round_id' in data:
+
         return Response.wrong_format(json.dumps({'message':'electionid missing'}))
 
     if 'picture' in data:
@@ -50,8 +51,8 @@ def create_choice(data: dict) -> str:
         return Response.database_error()
     return Response.ok(json.dumps({'id':choice.id, 'description': choice.description}))
 
-    
-    
+
+
 
 def delete_choice(choiceid: int) -> str:
     try:
