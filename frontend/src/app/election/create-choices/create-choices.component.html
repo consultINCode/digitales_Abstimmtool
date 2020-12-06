@@ -14,11 +14,7 @@
                 <mat-icon>attach_file</mat-icon>
             </button>
             <input hidden (change)="selectFile($event)" #fileInput type="file" id="file">
-        </mat-form-field>
+        </mat-form-field><br/>
         <button mat-flat-button color="accent" (click)="submitForm()" [disabled]="!choicesForm.valid">erstellen</button>
     </form>
-
-    <pre>
-        {{choicesForm.value | json}}
-    </pre>
 </mat-card>
