@@ -26,7 +26,8 @@ def read_choices(electionid: int) -> str:
 def create_choice(data: dict) -> str:
     if not 'description' in data:
         return Response.wrong_format(json.dumps({'message':'description missing'}))
-    if not 'electionid' in data:
+    if not 'election_round_id' in data:
+
         return Response.wrong_format(json.dumps({'message':'electionid missing'}))
 
     if 'picture' in data:
@@ -41,7 +42,8 @@ def create_choice(data: dict) -> str:
         description=data['description'], 
         counter=0, 
         picture=picture,
-        election_round_id=data['electionid']
+        election_round_id=data['election_round_id']
+
     )
     session.add(choice)
     try:
