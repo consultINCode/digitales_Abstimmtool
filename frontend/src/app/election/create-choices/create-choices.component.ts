@@ -32,6 +32,7 @@ export class CreateChoicesComponent implements OnChanges, OnInit {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
+        console.log(changes);
         if (changes.electionRound.currentValue.id) {
             this.choicesForm.controls.election_round_id.setValue(changes.electionRound.currentValue.id);
             this.choicesForm.enable();

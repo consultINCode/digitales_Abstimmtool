@@ -39,7 +39,7 @@ export class CreateElectionRoundPageComponent {
         const electionRound = this.electionForm.value as ElectionRoundInterface;
         this.httpElectionRoundService.createElectionRound(electionRound).subscribe(
             (electionRoundData: ElectionRoundInterface) => {
-                this.electionForm.setValue(electionRound);
+                this.electionForm.setValue(electionRoundData);
                 this.electionForm.disable();
                 this.isFormEnable = false;
             },
