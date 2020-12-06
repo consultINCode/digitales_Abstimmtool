@@ -14,11 +14,11 @@ export class HttpElectionRoundService {
   ) {}
 
   public getElectionRounds(): Observable<ElectionRoundInterface[]> {
-    return this.http.get<ElectionRoundInterface[]>(this.demUrl + 'electionrounds/getAllElectionRounds');
+    return this.http.get<ElectionRoundInterface[]>(this.demUrl + 'election/getAll');
   }
 
-  public setElectionRound(electionRound: ElectionRoundInterface): Observable<ElectionRoundInterface> {
-    return this.http.post<ElectionRoundInterface>(this.demUrl + 'electionrounds/createElectionRound', electionRound);
+  public createElectionRound(electionRound: ElectionRoundInterface): Observable<ElectionRoundInterface> {
+    return this.http.post<ElectionRoundInterface>(this.demUrl + 'election/create', electionRound);
   }
 
 }

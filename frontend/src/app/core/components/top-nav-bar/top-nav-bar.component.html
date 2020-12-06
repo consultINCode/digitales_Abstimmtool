@@ -1,0 +1,6 @@
+<mat-toolbar class="toolbar">
+        <img class="toolbar__logo" src="assets/consultIN.svg">
+        <nav class="toolbar__list">
+            <li *ngFor="let link of links"><a href="{{link.route}}">{{link.name}}</a></li>
+        </nav>
+</mat-toolbar>

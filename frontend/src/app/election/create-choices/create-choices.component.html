@@ -17,4 +17,8 @@
         </mat-form-field>
         <button mat-flat-button color="accent" (click)="submitForm()" [disabled]="!choicesForm.valid">erstellen</button>
     </form>
+
+    <pre>
+        {{choicesForm.value | json}}
+    </pre>
 </mat-card>

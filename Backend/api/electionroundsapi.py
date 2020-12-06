@@ -25,15 +25,15 @@ def create_election_round(data: dict):
     '''Creates an election round'''
     if not 'title' in data or not data['title']:
         return Response.wrong_format({"message": "Title is missing"})
-    if not 'max_choices' in data:
+    if not 'max_choices_per_person' in data:
         return Response.wrong_format({"message": "max_choices is missing"})
-    if not type(data['max_choices']) == int:
+    if not type(data['max_choices_per_person']) == int:
         return Response.wrong_format({'message' : 'max_choices: not a number'})
     
     elec_round = ElectionRound()
     elec_round.title = data['title']
     elec_round.running = 'not_started'
-    elec_round.max_choices_per_person = data['max_choices']
+    elec_round.max_choices_per_person = data['max_choices_per_person']
     session.add(elec_round)
     try:
          session.commit()

@@ -12,6 +12,12 @@ export class ElectionOverviewPageComponent implements OnInit {
     public electionRounds: ElectionRoundInterface[];
     public displayedColumns: string[] = ['title', 'running', 'max_choices_per_person'];
 
+    public status = {
+        running: 'play_arrow',
+        finished: 'stop',
+        not_started: 'not_started'
+    }
+
     constructor(
         private httpElectionRoundService: HttpElectionRoundService
     ) {

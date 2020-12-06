@@ -1,10 +1,8 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
-import {HttpElectionRoundService} from '../service/http-election-round.service';
 import {ElectionRoundInterface} from '../Interface/ElectionRound.Interface';
 import {HttpChoiceService} from '../service/http.choice.service';
 import {ChoiceInterface} from '../Interface/Choice.Interface';
-import {Observable} from 'rxjs';
 
 @Component({
     selector: 'app-create-choices',
@@ -34,16 +32,17 @@ export class CreateChoicesComponent implements OnChanges, OnInit {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
+        console.log(changes);
         if (changes.electionRound.currentValue.id) {
             this.choicesForm.controls.election_round_id.setValue(changes.electionRound.currentValue.id);
             this.choicesForm.enable();
         }
     }
 
-    public submitForm() {
+    public submitForm(): void {
         const choice = this.choicesForm.value as ChoiceInterface;
-        this.httpChoiceService.setChoice(choice).subscribe(
-            (choice: ChoiceInterface) => {
+        this.httpChoiceService.createChoice(choice).subscribe(
+            (result: ChoiceInterface) => {
                 alert('success');
                 this.emitCreatedChoice.emit(choice);
                 this.choicesForm.reset();
@@ -54,7 +53,7 @@ export class CreateChoicesComponent implements OnChanges, OnInit {
             }
         );
     }
-    public selectFile(event) {
+    public selectFile(event): void {
 
         this.file = event.target.files[0];
         const myReader = new FileReader();

@@ -8,7 +8,7 @@ import {PersonInterface} from '../Interface/Person.Interface';
     templateUrl: './create-person-page.component.html',
     styleUrls: ['./create-person-page.component.scss']
 })
-export class CreatePersonPageComponent implements OnInit {
+export class CreatePersonPageComponent {
 
     private isPresentDefault = true;
 
@@ -24,10 +24,8 @@ export class CreatePersonPageComponent implements OnInit {
     ) {
     }
 
-    ngOnInit(): void {
-    }
 
-    public submitForm() {
+    public submitForm(): void {
         const person = this.personForm.value as PersonInterface;
         this.personService.setPerson(person).subscribe(
             (success: any) => {

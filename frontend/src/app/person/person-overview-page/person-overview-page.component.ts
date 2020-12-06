@@ -14,7 +14,8 @@ export class PersonOverviewPageComponent implements OnInit {
 
     constructor(
         private personService: HttpPersonService
-    ) {}
+    ) {
+    }
 
     ngOnInit(): void {
         this.getPerson();
@@ -27,5 +28,14 @@ export class PersonOverviewPageComponent implements OnInit {
             }
         );
     }
+
+    public changePresence(person: PersonInterface): void {
+        this.personService.changePresence(person).subscribe(
+            () => {
+                person.is_present = !person.is_present;
+            }
+        );
+    }
+
 
 }

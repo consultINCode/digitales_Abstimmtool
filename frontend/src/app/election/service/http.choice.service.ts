@@ -19,8 +19,8 @@ export class HttpChoiceService {
         return this.http.get<ChoiceInterface[]>(this.demUrl + 'choice/election/' + String(electionRoundId));
     }
 
-    public setChoice(choice: ChoiceInterface): Observable<ChoiceInterface> {
-        return this.http.post<ChoiceInterface>(this.demUrl + 'choice/', choice);
+    public createChoice(choice: ChoiceInterface): Observable<ChoiceInterface> {
+        return this.http.post<ChoiceInterface>(this.demUrl + 'choice/create', choice);
     }
 
 }

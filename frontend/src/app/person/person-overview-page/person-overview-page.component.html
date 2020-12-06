@@ -15,7 +15,7 @@
           
             <ng-container matColumnDef="is_present">
               <th mat-header-cell *matHeaderCellDef> Anwesenheit </th>
-              <td mat-cell *matCellDef="let person">
+              <td mat-cell *matCellDef="let person" (click)="changePresence(person)">
                   <mat-icon aria-hidden="false" aria-label="is_present"> {{person.is_present ? 'check' : 'no_meeting_room' }}</mat-icon>
               </td>
             </ng-container>

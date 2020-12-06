@@ -35,11 +35,11 @@ export class CreateElectionRoundPageComponent {
     }
 
 
-    public submitForm() {
+    public submitForm(): void {
         const electionRound = this.electionForm.value as ElectionRoundInterface;
-        this.httpElectionRoundService.setElectionRound(electionRound).subscribe(
-            (electionRound: ElectionRoundInterface) => {
-                this.electionForm.setValue(electionRound);
+        this.httpElectionRoundService.createElectionRound(electionRound).subscribe(
+            (electionRoundData: ElectionRoundInterface) => {
+                this.electionForm.setValue(electionRoundData);
                 this.electionForm.disable();
                 this.isFormEnable = false;
             },
@@ -49,7 +49,7 @@ export class CreateElectionRoundPageComponent {
         );
     }
 
-    public updateCreatedChoices(event: Event){
+    public updateCreatedChoices(event: Event): void{
         // @ts-ignore
         this.createdChoices.push(event);
     }

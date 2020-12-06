@@ -1,5 +1,5 @@
-<div class="deco-bar card shadow">
-    <table mat-table [dataSource]="electionRounds" class="person-table ">
+<div class="wrapper">
+    <table mat-table [dataSource]="electionRounds" class="wrapper__person-table">
 
         <ng-container matColumnDef="title">
             <th mat-header-cell *matHeaderCellDef> Titel </th>
@@ -8,7 +8,9 @@
 
         <ng-container matColumnDef="running">
             <th mat-header-cell *matHeaderCellDef> Status </th>
-            <td mat-cell *matCellDef="let electionRound"> {{electionRound.running}} </td>
+            <td mat-cell *matCellDef="let electionRound">
+                <mat-icon> {{status[electionRound.running]}}</mat-icon>
+            </td>
         </ng-container>
 
         <ng-container matColumnDef="max_choices_per_person">

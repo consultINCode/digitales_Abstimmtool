@@ -43,7 +43,6 @@ def create_choice(data: dict) -> str:
         counter=0, 
         picture=picture,
         election_round_id=data['election_round_id']
-
     )
     session.add(choice)
     try:
@@ -52,8 +51,8 @@ def create_choice(data: dict) -> str:
         return Response.database_error()
     return Response.ok(json.dumps({'id':choice.id, 'description': choice.description}))
 
-    
-    
+
+
 
 def delete_choice(choiceid: int) -> str:
     try:
