@@ -12,7 +12,7 @@ import {ChoiceInterface} from '../Interface/Choice.Interface';
 export class CreateChoicesComponent implements OnChanges, OnInit {
     @Input() electionRound: ElectionRoundInterface;
     @Output() emitCreatedChoice = new EventEmitter<ChoiceInterface>();
-    public file;
+    public file: File;
 
     public choicesForm = this.formBuilder.group({
             description: ['', [Validators.required, Validators.minLength(3)]],
@@ -32,7 +32,6 @@ export class CreateChoicesComponent implements OnChanges, OnInit {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        console.log(changes);
         if (changes.electionRound.currentValue.id) {
             this.choicesForm.controls.election_round_id.setValue(changes.electionRound.currentValue.id);
             this.choicesForm.enable();
@@ -46,6 +45,7 @@ export class CreateChoicesComponent implements OnChanges, OnInit {
                 alert('success');
                 this.emitCreatedChoice.emit(choice);
                 this.choicesForm.reset();
+                this.file = null;
                 this.choicesForm.controls.election_round_id.setValue(this.electionRound.id);
             },
             (error: any) => {
@@ -62,6 +62,6 @@ export class CreateChoicesComponent implements OnChanges, OnInit {
             this.choicesForm.controls.picture.setValue(myReader.result);
         };
         myReader.readAsDataURL(this.file);
-    }
+    }S
 }
 
