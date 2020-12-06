@@ -28,7 +28,7 @@ def create_choice(data: dict) -> str:
         return Response.wrong_format(json.dumps({'message':'description missing'}))
     if not 'election_round_id' in data:
 
-        return Response.wrong_format(json.dumps({'message':'electionid missing'}))
+        return Response.wrong_format(json.dumps({'message':'election_round_id missing'}))
 
     if 'picture' in data:
         if data['picture'].endswith('=='):

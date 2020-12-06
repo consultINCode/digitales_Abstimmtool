@@ -79,7 +79,7 @@ def check_out_from_election_round(userid):
 def delete_choice(id):
     return api.choicesapi.delete_choice(id)
 
-#POST: { "description": <string>, "electionid":<number>, "picture?":<base64string> };
+#POST: { "description": <string>, "election_round_id":<number>, "picture?":<base64string> };
 #RETURNS: { "id":<number>, "updated":<boolean>, "message?":<error message> }
 @app.route('/api/choice/create', methods=['POST'])
 def create_choice():
@@ -103,7 +103,7 @@ def update_votes(choiceid):
 def read_choices(electionid):
     return api.choicesapi.read_choices(electionid)
 
-#POST: { "title":<string>, "max_choices":<number> } 
+#POST: { "title":<string>, "max_choices_per_person":<number> }
 #RETURNS: statuscode: True = 200, False = 500
 @app.route('/api/election/create', methods =['POST'])
 def create_election_round():

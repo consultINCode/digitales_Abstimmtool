@@ -26,9 +26,9 @@ def create_election_round(data: dict):
     if not 'title' in data or not data['title']:
         return Response.wrong_format({"message": "Title is missing"})
     if not 'max_choices_per_person' in data:
-        return Response.wrong_format({"message": "max_choices is missing"})
+        return Response.wrong_format({"message": "max_choices_per_person is missing"})
     if not type(data['max_choices_per_person']) == int:
-        return Response.wrong_format({'message' : 'max_choices: not a number'})
+        return Response.wrong_format({'message' : 'max_choices_per_person: not a number'})
     
     elec_round = ElectionRound()
     elec_round.title = data['title']
