@@ -4,6 +4,7 @@ import api.choicesapi
 import api.personapi
 import api.voteapi
 import api.electionroundsapi
+import api.csvapi
 # TODO(Why is this called choiceproxyapi and no <name>api.py?)
 import api.choiceproxyapi
 
@@ -175,6 +176,13 @@ def get_all_persons_who_have_not_voted(electionroundid):
 @app.route('/api/vote/setVote', methods =['POST'])
 def set_vote():       
     return api.voteapi.set_vote(request.json)
+
+
+#POST: file
+#RETURNS: { "message":<string> }
+@app.route('/api/csv', methods =['POST'])
+def upload_csv():       
+    return api.csvapi.upload_csv(request.files['file'])
 
 '''@app.route("/")
 def hello():
