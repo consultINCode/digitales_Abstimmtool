@@ -7,25 +7,50 @@ import api.electionroundsapi
 import api.csvapi
 # TODO(Why is this called choiceproxyapi and no <name>api.py?)
 import api.choiceproxyapi
+import login.auth
+
+from flask import Flask, request
+# testing endpoint decorators endpoint sessions
+from flask import session as fsession
+
+#Decorators import
+from login.auth import logged_in,has_role,is_present
+import configparser
+
+config = configparser.ConfigParser()
+config.read('config.ini')
 
 
-from models import Person, ElectionRound, Choice, session
-from flask import Flask, request, render_template
-
+from flask import abort
+import datetime
 ''' 
 TODO List:
-- Validierung in API file auslagern
-- Statuscode ins API file
 - return json richtig parsen fuer checkin und checkout
-- readallChoices get elec info AND choices
 '''
 
 app = Flask(__name__)
-
+app.secret_key = 'some secret key to tess'
 # Init logging
 logging.basicConfig(filename='example.log', level=logging.DEBUG)
 
 
+
+
+
+@app.route('/sessions', methods=['GET'])
+@logged_in
+@has_role("0")
+@is_present
+def sessions():
+    print(str(fsession))
+    return "fsession"
+
+# Logout method
+
+@app.route('/login', methods=['POST'])
+def login_user():
+    return login.auth.login(request)
+    
 #GET
 #RETURNS: { [{ "id":<number>, "name":<string>, "password":<string>, "is_present":<boolean>, "role":<number as string> }] }
 @app.route('/api/persons/getAllPersons', methods =['GET'])
@@ -183,11 +208,3 @@ def set_vote():
 @app.route('/api/csv', methods =['POST'])
 def upload_csv():       
     return api.csvapi.upload_csv(request.files['file'])
-
-'''@app.route("/")
-def hello():
-    return api.helpers.ok({"message": "test"})
-'''
-if __name__ == "__main__":
-    app.run()
-

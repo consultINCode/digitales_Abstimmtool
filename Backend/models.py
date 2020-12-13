@@ -70,6 +70,7 @@ class Person(Base):
     __tablename__ = 'persons'
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
+    mail = Column(String, nullable=False) #, unique = True)
     password = Column(String, nullable=False)
     is_present = Column(Boolean, nullable=False)
     # Values of role: 
