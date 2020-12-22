@@ -1,6 +1,5 @@
 # pylint: disable=maybe-no-member
 import configparser
-
 from sqlalchemy import (
     Boolean,
     create_engine,
@@ -11,8 +10,14 @@ from sqlalchemy import (
     Text,
     Table
 )
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, backref
+#for AdminAccount
+
+from passlib.hash import argon2
+from random import choice
+
 
 
 # Init configparser
@@ -70,13 +75,13 @@ class Person(Base):
     __tablename__ = 'persons'
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
-    mail = Column(String, nullable=False) #, unique = True)
+    mail = Column(String, nullable=False, unique = True)
     password = Column(String, nullable=False)
     is_present = Column(Boolean, nullable=False)
-    # Values of role: 
-    #   0 = Admin
-    #   1 = User 
-    #   2 = Election Supervisor
+    # Values of role:
+    #   0 = User 
+    #   1 = Election Supervisor
+    #   2 = Admin
     #   3 = Admin Election Supervisor
     role = Column(String, nullable=False) 
     
@@ -92,15 +97,13 @@ class Person(Base):
     secondaryjoin=id == has_choice_proxy_table.c.sender_id,
     backref=backref('has_proxied_vote_to')
     )
-   
-    
+     
 # Create tables
 Base.metadata.create_all(engine)
 
 # Create session
 Session = sessionmaker(bind=engine)
 session = Session()
-
 
 if config['DB']['add_test_data'] == "True":     
     ## ADD SOME TEST DATA INTO DB
@@ -145,11 +148,5 @@ if config['DB']['add_test_data'] == "True":
     p2.voted_in_election_round.append(elec_round)
     # Anna has Bobs Vote
     p1.received_proxy_vote.append(p2)
-
-    session.add(p1)
-    session.add(p2)
-    session.add(elec_round)
-    session.add(ch1)
-    session.add(ch2)
-
+    
     session.commit()

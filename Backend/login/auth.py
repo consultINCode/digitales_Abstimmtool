@@ -14,26 +14,34 @@ from functools import wraps, update_wrapper
 import api.response_helper as Response
 
 
+
 config = configparser.ConfigParser()
 config.read('config.ini')
 
 def login(data):
-
-    email = data.form['email']
-    password = data.form['password']
-    print(email)
-    print(password)
-    user = session.query(Person).filter(Person.mail == email).first()
-    print(user.password)
-    print(password)
-    if (argon2.verify(password, user.password)):
+    if not 'email' in data.form:
+        return Response.wrong_format({'message':'email missing'})
+    if not 'password' in data.form:
+        return Response.wrong_format({'message':'password missing'})
+    user = session.query(Person).filter(Person.mail == data.form['email']).first()
+    if (argon2.verify(data.form['password'], user.password)):
         sessionid = uuid.uuid4()
-        print (sessionid)
         session_end = datetime.datetime.now() + datetime.timedelta(seconds=config.getint('Session','session_duration'))
-        fsession[str(sessionid)] = {"user.id" : user.id, "session_end" : session_end}
-        return Response.ok({"sessionID":sessionid})
-    return Response.database_error()
+        fsession[str(sessionid)] = {'user.id' : user.id, 'session_end' : session_end}
+        return Response.ok({'sessionID':sessionid})
+    Response.unauthorized()
 
+def logout(sessionid: int):
+    if not 'Authorization' in request.headers:
+        Response.unauthorized()
+    token  = request.headers['Authorization']
+    try:
+        fsession.pop(token)
+    except KeyError:
+        return Response.ok("Session nicht vorhanden")
+    except:
+        return Response.server_error()
+    return Response.ok("Logout war ergolreich")
 
 # Decoraters
 
@@ -49,11 +57,11 @@ def logged_in(f):
                 Response.unauthorized()
             if (userid == None):
                 Response.unauthorized()
-            if(fsession[token]["session_end"] < datetime.datetime.now()):
+            if(fsession[token]['session_end'] < datetime.datetime.now()):
                 fsession.pop(token)
                 Response.unauthorized()
             session_end = datetime.datetime.now() + datetime.timedelta(seconds=config.getint('Session','session_duration'))
-            fsession[token]["session_end"] = session_end
+            fsession[token]['session_end'] = session_end
             fsession.update()
             return f(*args, **kws)            
     return decorated_function
@@ -65,7 +73,7 @@ def is_present(f):
                 Response.unauthorized()
             token  = request.headers['Authorization']
             try: 
-                userid  = fsession.get(token)["user.id"]  
+                userid  = fsession.get(token)['user.id']  
             except:
                 Response.unauthorized()
             if (userid == None):
@@ -83,7 +91,7 @@ def has_role(role):
                 Response.unauthorized()
             token  = request.headers['Authorization']
             try: 
-                userid  = fsession.get(token)["user.id"]  
+                userid  = fsession.get(token)['user.id']  
             except:
                 Response.unauthorized()
             if (userid == None):

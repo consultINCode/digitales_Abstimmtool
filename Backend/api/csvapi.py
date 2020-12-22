@@ -6,6 +6,7 @@ from models import Person,session
 from passlib.hash import argon2
 from random import choice
 from api.personapi import generate_password
+from sqlalchemy.exc import IntegrityError
 
 import configparser
 config = configparser.ConfigParser()
@@ -31,7 +32,6 @@ def upload_csv(file):
     for index, row in csv_file_pandas.iterrows():
         person = Person()
         person.name = '{} {}'.format(row[first_name], row[surname])
-        # TODO: Encpyt Passwords
         password = ''.join(
             [choice('abcdefghijklmnopqrstuvwxyz0123456789-') for i in range(15)])
         person.password = argon2.hash(password)
@@ -41,12 +41,20 @@ def upload_csv(file):
         pw_list.append({'mail':person.mail, 'password':password, 'name': person.name})
         session.add(person)
     
+    duplicates = []
     try:
          session.commit()
+    except IntegrityError as e:
+        print(e)
+        duplicates.append(e)
     except:
         return Response.database_error()
 
+    send_email(pw_list)
+    
+    return Response.ok({'message':'ok', "duplicates" : str(duplicates)})
 
+def send_email(mail_list):
     import smtplib, ssl
     from templates.csvmail import get_message
 
@@ -61,7 +69,7 @@ def upload_csv(file):
         server = smtplib.SMTP(smtp_server,port)
         server.starttls(context=context) # Secure the connection
         server.login(sender_email, password)
-        for recipient in pw_list:
+        for recipient in mail_list:
             message = get_message(recipient['name'], recipient['password'], recipient['mail'])
             server.sendmail(sender_email, recipient['mail'], message)
             print('mail sent to {}'.format(recipient['mail']))
@@ -70,5 +78,24 @@ def upload_csv(file):
         return Response.server_error({'message':'error while sending mails'})
     finally:
          server.quit()
-    
-    return Response.ok({'message':'ok'})
+
+def createadmin():
+    pw_list = []
+    person = Person()
+    person.name = '{} {}'.format("Admin", "Er hat die Macht")
+    password = ''.join(
+        [choice('abcdefghijklmnopqrstuvwxyz0123456789-') for i in range(15)])
+    person.password = argon2.hash(password)
+    person.mail = config['Mail_Server']['mail']
+    person.is_present = False
+    person.role = '2'
+    pw_list.append({'mail':person.mail, 'password':password, 'name': person.name})
+    print(str(pw_list))
+    session.add(person)
+    try:
+        session.commit()
+    except IntegrityError as e:
+        print(e)
+    except:
+        print("test")
+    send_email(pw_list)

@@ -8,7 +8,6 @@ import api.csvapi
 # TODO(Why is this called choiceproxyapi and no <name>api.py?)
 import api.choiceproxyapi
 import login.auth
-
 from flask import Flask, request
 # testing endpoint decorators endpoint sessions
 from flask import session as fsession
@@ -46,6 +45,9 @@ def sessions():
     return "fsession"
 
 # Logout method
+@app.route('/logout', methods=['GET'])
+def logout_user():
+    return login.auth.logout(request)
 
 @app.route('/login', methods=['POST'])
 def login_user():
@@ -208,3 +210,6 @@ def set_vote():
 @app.route('/api/csv', methods =['POST'])
 def upload_csv():       
     return api.csvapi.upload_csv(request.files['file'])
+
+#Create Adminaccount on Startup
+# api.csvapi.createadmin()
