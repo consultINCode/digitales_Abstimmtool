@@ -1,0 +1,18 @@
+[DB]
+db_con_string = #sqlite:///example.db
+echo = False
+add_test_data = False
+
+[Server]
+domain = #https://www.example.com[:port]
+
+[Mail_Server]
+mail = #mail@example.com
+smtp_server = #smtp.example.com
+port = 587
+password = #PASSWORD
+
+
+[Session]
+session_duration = 1800
+APP_SECRET= #APPSECRET

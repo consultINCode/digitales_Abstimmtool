@@ -104,6 +104,7 @@ def create_person(data: dict):
     p1.name = data['name']
     # TODO: Encpyt Passwords
     p1.password = ""
+    p1.mail= data['email']
     p1.is_present = False
     p1.role = "0"
     session.add(p1)
@@ -151,7 +152,6 @@ def generate_password(data: dict):
     person.password = argon2.hash(password)
     session.commit()
     return '{ "new_password" : "{}"}'.format(password)
-    
 
 # ### check_in_for_election_round(ElectionRound)
 # Anwesenheit für einen Wahlgang bestätigen
