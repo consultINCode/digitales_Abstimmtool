@@ -151,7 +151,6 @@ def generate_password(data: dict):
     person.password = argon2.hash(password)
     session.commit()
     return '{ "new_password" : "{}"}'.format(password)
-    
 
 # ### check_in_for_election_round(ElectionRound)
 # Anwesenheit für einen Wahlgang bestätigen

@@ -1,5 +1,6 @@
 test.db
 example.log
+config.ini
 **/.vscode/
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -1,4 +1,6 @@
 import json
+from flask import abort
+
 def ok(message: dict):
     return message, 200
 
@@ -13,3 +15,6 @@ def server_error(message: dict):
     
 def database_error():
     return {"message":"database error"}, 500
+
+def unauthorized():
+    abort(401)
