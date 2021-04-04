@@ -20,7 +20,7 @@ def get_message(name: str, password: str, mail: str) -> str:
     # Attach parts into message container.
     # According to RFC 2046, the last part of a multipart message, in this case
     # the HTML message, is best and preferred.
-
+    #TODO: Move to seperate File
     html = '''
     <html>
     <head></head>

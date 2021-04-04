@@ -34,7 +34,7 @@ TODO List:
 
 app = Flask(__name__)
 # Secret for encrypting the sessions
-app.secret_key = config[Session][APP_SECRET]
+app.secret_key = config['Session']['APP_SECRET']
 # Init logging
 logging.basicConfig(filename='example.log', level=logging.DEBUG)
 
