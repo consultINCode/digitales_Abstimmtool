@@ -33,7 +33,8 @@ TODO List:
 '''
 
 app = Flask(__name__)
-app.secret_key = 'some secret key to tess'
+# Secret for encrypting the sessions
+app.secret_key = config[Session][APP_SECRET]
 # Init logging
 logging.basicConfig(filename='example.log', level=logging.DEBUG)
 
