@@ -43,6 +43,10 @@ def create_choice(data: dict) -> str:
         counter=0, 
         picture=picture,
         election_round_id=data['election_round_id']
+<<<<<<< HEAD
+=======
+
+>>>>>>> backend/clean
     )
     session.add(choice)
     try:
