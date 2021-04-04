@@ -104,6 +104,7 @@ def create_person(data: dict):
     p1.name = data['name']
     # TODO: Encpyt Passwords
     p1.password = ""
+    p1.mail= data['email']
     p1.is_present = False
     p1.role = "0"
     session.add(p1)

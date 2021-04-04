@@ -1,4 +1,4 @@
-# pylint: disable=maybe-no-member
+
 import configparser
 from sqlalchemy import (
     Boolean,
@@ -17,16 +17,15 @@ from sqlalchemy.orm import sessionmaker, relationship, backref
 
 from passlib.hash import argon2
 from random import choice
+import os
 
-
-
+basedir = os.path.abspath(os.path.dirname(__file__))
 # Init configparser
 config = configparser.ConfigParser()
 config.read('config.ini')
 
 engine = create_engine(
-    config['DB']['db_con_string'], 
-    echo=(config['DB']['echo'] == "True")) # Hacky conversion
+    (config['DB']['db_con_string']+ os.path.join(basedir, 'test.db')), echo = config.getboolean('DB','echo'))
 Base = declarative_base()
 
 # Linking Table for Votes per Electionround
@@ -109,13 +108,15 @@ if config['DB']['add_test_data'] == "True":
     ## ADD SOME TEST DATA INTO DB
     ## Person
     p1 = Person()
-    p1.name = "Anna"
-    p1.password = "hunter2"
+    p1.name = "Admin"
+    p1.mail = "admin@gma.de"
+    p1.password = argon2.hash("Admin")
     p1.is_present = True
-    p1.role = 0
-
+    p1.role = 3
+    """
     p2 = Person()
     p2.name = "Bob"
+    p1.mail = "test@gma.de"
     p2.password = "lol123"
     p2.is_present = False
     p2.role = 1
@@ -148,5 +149,6 @@ if config['DB']['add_test_data'] == "True":
     p2.voted_in_election_round.append(elec_round)
     # Anna has Bobs Vote
     p1.received_proxy_vote.append(p2)
-    
+    """
+    session.add(p1)
     session.commit()
