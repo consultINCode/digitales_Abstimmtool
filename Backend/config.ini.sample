@@ -15,4 +15,4 @@ password = #PASSWORD
 
 [Session]
 session_duration = 1800
-APP_SECRET= Testsecret
+APP_SECRET= #APPSECRET
