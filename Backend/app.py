@@ -15,6 +15,7 @@ from  blueprints.personblueprint import person_Blueprint
 from  blueprints.choiceblueprint import choice_Blueprint
 from  blueprints.electionblueprint import election_Blueprint
 from blueprints.choiceproxyblueprint import choiceproxy_Blueprint
+from blueprints.voteblueprint import vote_Blueprint
 
 #Decorators import
 from login.auth import logged_in,has_role,is_present
@@ -41,6 +42,7 @@ app.register_blueprint(person_Blueprint)
 app.register_blueprint(choice_Blueprint)
 app.register_blueprint(election_Blueprint)
 app.register_blueprint(choiceproxy_Blueprint)
+app.register_blueprint(vote_Blueprint)
 
 
 @app.route('/sessions', methods=['GET'])

@@ -3,7 +3,7 @@
 import base64
 import json
 
-from models import session, ElectionRound, Person
+from models import session, ElectionRound, Person, Choice
 import api.response_helper as Response
 
 #Helper
@@ -29,8 +29,66 @@ def _get_electionround_by_id(elec_round_id: int) -> ElectionRound:
     # Handle invalid election round
     if elec_round is None:
         return Response.ressource_not_found({"message":"No electionround for this id."})
+    return elec_round
+
+def get_person_by_id(personid :int) -> Person:
+    try:
+        person = session.query(Person).filter_by(
+                id=personid
+            ).first()
+        session.commit()
+    except:
+        return Response.database_error()
+    if person is None:
+        return Response.ressource_not_found({ "message" : "No persion for this id."})
+    return person
+
+
+def place_vote(data:dict):
+    if not 'choice_id' in data:
+        return Response.wrong_format({'message': 'choiceid is required for voting'})
+    if not 'election_round_id' in data:
+         return Response.wrong_format({'message': 'election_round_id required for voting'})
+    if not 'person_id' in data: 
+        return Response.wrong_format({'message': 'person_id required for voting'})
+    try:
+        election_round_id = int(data['election_round_id'])
+        person_id = int(data['person_id'])
+        choice_id = int(data['choice_id'])
+    except:
+        return Response.wrong_format({"message":"ids have to be an int base 10"})
+    elec_round = _get_electionround_by_id(election_round_id)
+    if not elec_round:
+        return Response.ressource_not_found({"message":"No electionround for this id."})
+    person = get_person_by_id(person_id)
+    if  person in elec_round.persons_voted:
+        return Response.server_error({"message":"Person already voted"})
+    try:
+        choice = session.query(Choice).filter_by(id = choice_id).first()
+        session.commit()
+        if choice is None:
+            return Response.ressource_not_found({ "message" : "No Choice with this id."})
+    except:
+        print("no choice")
+        return Response.database_error()
     
-    return Response.ok(model_as_dict(elec_round))
+    if choice not in elec_round.choices:
+        return Response.server_error({"message":"Electionround has no Choice with that ID"})
+    try:
+        choice.counter = choice.counter + 1
+        session.commit()
+    except:
+        return Response.database_error()
+    try:
+        elec_round.persons_voted.append(person)
+        session.commit()
+    except:
+        return Response.database_error()
+
+    return Response.ok(model_as_dict(choice))
+    
+
+    
 
 def set_vote(data: dict):
     '''Add a person to the as has voted to the election_round'''

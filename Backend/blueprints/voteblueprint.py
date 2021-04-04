@@ -24,3 +24,8 @@ def get_all_persons_who_have_not_voted(electionroundid):
 def set_vote():       
     return voteapi.set_vote(request.json)
 
+#POST: { "election_round_id":<number>, "person_id":<number> , "choice_id": <number>}
+#RETURNS: { "Result?":<string>, "Error?":<string> }
+@vote_Blueprint.route('/api/vote/place_vote', methods =['POST'])
+def place_vote():       
+    return voteapi.place_vote(request.json)
